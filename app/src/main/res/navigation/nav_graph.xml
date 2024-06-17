@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/homeScreen">
+
+    <fragment
+        android:id="@+id/scannerScreen"
+        tools:layout="@layout/scanner_screen"
+        android:name="uz.duol.sizscanner.presentation.ui.ScannerScreen"
+        android:label="ScannerScreen" />
+    <fragment
+        android:id="@+id/homeScreen"
+        android:name="uz.duol.sizscanner.presentation.ui.HomeScreen"
+        tools:layout="@layout/home_screen"
+        android:label="HomeScreen" >
+        <action
+            android:id="@+id/action_homeScreen_to_scannerScreen"
+            app:destination="@id/scannerScreen" />
+    </fragment>
+</navigation>
