@@ -2,7 +2,7 @@
 
     <string name="app_name">SIZ Scanner</string>
     <string name="bar_type">Barcode Type</string>
-    <string name="scan_result">Scanned Result</string>
+    <string name="scan_result">Scanned Result showing on check status </string>
     <string name="scan_on">Scan On</string>
     <string name="scan_off">Scan Off</string>
     <string name="auto_scan">Auto Scan</string>
@@ -12,4 +12,45 @@
     <string name="property_enable">Enable UPC-A "Send Check Character"</string>
     <string name="property_disable">Disable UPC-A "Send Check Character"</string>
     <string name="msg_wait">Waiting&#8230;</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="user">Пользователь</string>
+    <string name="user_1">Axmadaliev Doston</string>
+    <string name="tasks">Задания</string>
+    <string name="task_2">Task 2</string>
+    <string name="slash" translatable="false">/</string>
+    <string name="task_id">Ид задания</string>
+    <string name="all_marking_qty_title">Kол-во марк:</string>
+    <string name="start">Выполният</string>
+    <string name="done">Завершить</string>
+    <string name="task_list">Список заданий</string>
+    <string name="no_scanned">Не сканируется</string>
+    <string name="failed_scanned">Ожидает синхронизации</string>
+    <string name="success_scanned">Успешно</string>
+    <string name="enter_pin_code">Введите PIN-код</string>
+    <string name="one_number">1</string>
+    <string name="two_number">2</string>
+    <string name="three_number">3</string>
+    <string name="four_number">4</string>
+    <string name="five_number">5</string>
+    <string name="six_number">6</string>
+    <string name="seven_number">7</string>
+    <string name="eight_number">8</string>
+    <string name="nine_number">9</string>
+    <string name="zero_number">0</string>
+    <string name="no_result">Нет результат</string>
+    <string name="unauthorised">Ошибка авторизации</string>
+    <string name="not_found">Не найдено</string>
+    <string name="server_error">Ошибка сервера</string>
+    <string name="unknown_error">Что-то пошло не так</string>
+    <string name="error_internet">Проблема с интернетом</string>
+    <string name="read_fail">READ_FAIL</string>
+    <string name="more">Подробный</string>
+
+
+    <array name="tab_list">
+        <item>@string/no_scanned</item>
+        <item>@string/failed_scanned</item>
+        <item>@string/success_scanned</item>
+    </array>
 </resources>

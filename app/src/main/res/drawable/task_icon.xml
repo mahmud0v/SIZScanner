@@ -1,48 +1,10 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
+    android:width="34dp"
+    android:height="34dp"
+    android:viewportWidth="34"
+    android:viewportHeight="34">
   <path
-      android:pathData="M9,2L15,2A1,1 0,0 1,16 3L16,5A1,1 0,0 1,15 6L9,6A1,1 0,0 1,8 5L8,3A1,1 0,0 1,9 2z"
-      android:strokeLineJoin="round"
-      android:strokeWidth="2"
-      android:fillColor="#00000000"
-      android:strokeColor="@color/icon_color"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M16,4h2a2,2 0,0 1,2 2v14a2,2 0,0 1,-2 2H6a2,2 0,0 1,-2 -2V6a2,2 0,0 1,2 -2h2"
-      android:strokeLineJoin="round"
-      android:strokeWidth="2"
-      android:fillColor="#00000000"
-      android:strokeColor="@color/icon_color"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M12,11h4"
-      android:strokeLineJoin="round"
-      android:strokeWidth="2"
-      android:fillColor="#00000000"
-      android:strokeColor="@color/icon_color"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M12,16h4"
-      android:strokeLineJoin="round"
-      android:strokeWidth="2"
-      android:fillColor="#00000000"
-      android:strokeColor="@color/icon_color"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M8,11h0.01"
-      android:strokeLineJoin="round"
-      android:strokeWidth="2"
-      android:fillColor="#00000000"
-      android:strokeColor="@color/icon_color"
-      android:strokeLineCap="round"/>
-  <path
-      android:pathData="M8,16h0.01"
-      android:strokeLineJoin="round"
-      android:strokeWidth="2"
-      android:fillColor="#00000000"
-      android:strokeColor="@color/icon_color"
-      android:strokeLineCap="round"/>
+      android:pathData="M5.48,0C5.977,0 6.38,0.403 6.38,0.9V2.857H9.06V0.9C9.06,0.403 9.463,0 9.96,0C10.457,0 10.86,0.403 10.86,0.9V2.857H13.54V0.9C13.54,0.403 13.943,0 14.44,0C14.937,0 15.34,0.403 15.34,0.9V2.857H18.02V0.9C18.02,0.403 18.423,0 18.92,0C19.417,0 19.82,0.403 19.82,0.9V2.857H23.186C23.739,2.857 24.186,3.305 24.186,3.857V33.001C24.186,33.554 23.739,34.001 23.186,34.001H1C0.448,34.001 0,33.554 0,33.001V3.857C0,3.305 0.448,2.857 1,2.857H4.58V0.9C4.58,0.403 4.983,0 5.48,0ZM4.58,6.813V4.857H2V32.001H22.186V4.857H19.82V6.813C19.82,7.31 19.417,7.713 18.92,7.713C18.423,7.713 18.02,7.31 18.02,6.813V4.857H15.34V6.813C15.34,7.31 14.937,7.713 14.44,7.713C13.943,7.713 13.54,7.31 13.54,6.813V4.857H10.86V6.813C10.86,7.31 10.457,7.713 9.96,7.713C9.463,7.713 9.06,7.31 9.06,6.813V4.857H6.38V6.813C6.38,7.31 5.977,7.713 5.48,7.713C4.983,7.713 4.58,7.31 4.58,6.813ZM7.4,10.137C7.897,10.137 8.3,10.54 8.3,11.037V12.883H14.787C16.388,12.883 17.687,14.181 17.687,15.783V22.175H19.773C20.27,22.175 20.673,22.578 20.673,23.075C20.673,23.572 20.27,23.975 19.773,23.975H17.687V26.032C17.687,26.529 17.284,26.932 16.787,26.932C16.29,26.932 15.887,26.529 15.887,26.032V23.975H9.4C7.798,23.975 6.5,22.677 6.5,21.075V14.683H4.413C3.916,14.683 3.513,14.28 3.513,13.783C3.513,13.286 3.916,12.883 4.413,12.883H6.5V11.037C6.5,10.54 6.903,10.137 7.4,10.137ZM8.3,14.683V21.075C8.3,21.683 8.793,22.175 9.4,22.175H15.887V15.783C15.887,15.175 15.394,14.683 14.787,14.683H8.3ZM27.027,2.435C26.474,2.435 26.027,2.882 26.027,3.435V27.51C26.027,27.723 26.093,27.92 26.206,28.082C26.154,28.262 26.126,28.452 26.126,28.648C26.126,29.046 26.243,29.435 26.461,29.767L27.492,31.338C28.592,33.013 31.018,33.094 32.228,31.497L33.493,29.828C33.757,29.48 33.9,29.054 33.9,28.617C33.9,28.429 33.874,28.247 33.826,28.074C33.936,27.914 34,27.719 34,27.51V3.435C34,2.882 33.552,2.435 33,2.435H27.027ZM27.927,28.648C27.927,28.597 27.943,28.549 27.971,28.51H32.07C32.089,28.541 32.1,28.578 32.1,28.617C32.1,28.662 32.085,28.705 32.058,28.741L30.793,30.41C30.334,31.016 29.414,30.985 28.997,30.35L27.966,28.779C27.94,28.74 27.927,28.695 27.927,28.648ZM28.027,26.51V10.248H32V26.51H28.027ZM32,8.448H28.027V4.435H32V8.448ZM12.946,17.374H11.24V19.063H12.946V17.374Z"
+      android:fillColor="#D9D9D9"
+      android:fillType="evenOdd"/>
 </vector>

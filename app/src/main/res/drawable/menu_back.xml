@@ -9,9 +9,9 @@
                android:color="@color/stroke_color"
                />
 
-            <corners android:radius="8dp"/>
+            <corners android:radius="5dp"/>
 
-            <solid android:color="@color/menu_back_color"/>
+            <solid android:color="@color/white"/>
 
         </shape>
     </item>

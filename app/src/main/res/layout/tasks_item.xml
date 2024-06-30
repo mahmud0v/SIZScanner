@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/llTaskItem"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginTop="6dp"
+    android:layout_marginBottom="5dp"
+    android:background="@drawable/task_item_back"
+    android:elevation="1dp">
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/taskIdTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="8dp"
+        android:fontFamily="@font/sf_pro_display"
+        android:text="@string/task_id"
+        android:textColor="#7A889B"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/taskIdNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:fontFamily="@font/sf_pro_display"
+        android:textColor="#262E3A"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:layout_constraintLeft_toLeftOf="@id/taskIdTitle"
+        app:layout_constraintTop_toBottomOf="@id/taskIdTitle"
+        tools:text="#17" />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="16dp"
+        android:text="28.03.2024"
+        android:textColor="@color/title_color_1"
+        android:textSize="12sp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@id/taskIdTitle" />
+
+
+    <View
+        android:id="@+id/line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#E8EEF4"
+        app:layout_constraintTop_toBottomOf="@id/llNumberOfProduct" />
+
+
+    <LinearLayout
+        android:id="@+id/llNumberOfProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintRight_toRightOf="@id/date"
+        app:layout_constraintTop_toBottomOf="@id/date">
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/all_marking_qty_title"
+            android:textColor="@color/text_color" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/numberOfProduct"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:text="10"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text = "Proccess"
+        android:textColor="@color/closed_status_text"
+        android:textSize="13sp"
+        android:id="@+id/taskStatus"
+        app:layout_constraintTop_toBottomOf="@id/line"
+        android:background="@drawable/closed_status_back"
+        android:layout_marginLeft="16dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:paddingHorizontal="8dp"
+        android:paddingVertical="2dp"
+        android:layout_marginTop="8dp"
+        />
+
+
+    <com.google.android.material.button.MaterialButton
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:text="@string/more"
+        android:layout_marginRight="16dp"
+        android:textColor="@color/red_color"
+        android:fontFamily="@font/sf_pro_display"
+        android:textAllCaps="false"
+        android:textSize="12sp"
+        android:id="@+id/moreBtn"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/line"
+
+
+        />
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

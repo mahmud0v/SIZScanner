@@ -3,20 +3,60 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/homeScreen">
+    app:startDestination="@id/PINCodeScreen">
 
     <fragment
         android:id="@+id/scannerScreen"
-        tools:layout="@layout/scanner_screen"
-        android:name="uz.duol.sizscanner.presentation.ui.ScannerScreen"
+        tools:layout="@layout/scanner_btm_sheet_dialog"
+        android:name="uz.duol.sizscanner.presentation.ui.dialog.ScanningProductDialog"
         android:label="ScannerScreen" />
     <fragment
         android:id="@+id/homeScreen"
-        android:name="uz.duol.sizscanner.presentation.ui.HomeScreen"
+        android:name="uz.duol.sizscanner.presentation.ui.screen.HomeScreen"
         tools:layout="@layout/home_screen"
         android:label="HomeScreen" >
+
         <action
-            android:id="@+id/action_homeScreen_to_scannerScreen"
+            android:id="@+id/action_homeScreen_to_tasksScreen"
+            app:destination="@id/tasksScreen" />
+        <argument
+            android:name="userInfo"
+            app:argType="uz.duol.sizscanner.data.remote.response.CheckPinResponse"
+            app:nullable="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/tasksScreen"
+        tools:layout="@layout/tasks_screen"
+        android:name="uz.duol.sizscanner.presentation.ui.screen.TasksScreen"
+        android:label="TasksScreen" >
+        <action
+            android:id="@+id/action_tasksScreen_to_scannerScreen"
             app:destination="@id/scannerScreen" />
+        <action
+            android:id="@+id/action_tasksScreen_to_taskItemsScreen"
+            app:destination="@id/taskItemsScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/taskItemsScreen"
+        android:name="uz.duol.sizscanner.presentation.ui.screen.ScanningProcessScreen"
+        tools:layout="@layout/scanning_process_screen"
+        android:label="TaskItemsScreen" >
+        <argument
+            android:name="taskInfo"
+            app:argType="uz.duol.sizscanner.data.remote.response.TaskResponse" />
+        <action
+            android:id="@+id/action_taskItemsScreen_to_scannerScreen"
+            app:destination="@id/scannerScreen" />
+    </fragment>
+    <fragment
+        android:id="@+id/PINCodeScreen"
+        tools:layout="@layout/pin_code_screen"
+        android:name="uz.duol.sizscanner.presentation.ui.screen.PINCodeScreen"
+        android:label="PINCodeScreen" >
+        <action
+            android:id="@+id/action_PINCodeScreen_to_homeScreen"
+            app:destination="@id/homeScreen"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
 </navigation>

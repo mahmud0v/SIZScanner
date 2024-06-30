@@ -2,93 +2,92 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/screen_back_color"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@drawable/user_top_gradient"
     android:layout_height="match_parent">
 
 
-    <LinearLayout
-        android:layout_width="320dp"
-        android:layout_height="60dp"
+
+
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:src="@drawable/user"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:background="@drawable/user_back_layout"
-        android:id="@+id/llUser"
-        android:orientation="horizontal"
-        android:layout_marginTop="24dp"
-        >
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="Foydalanuvchi:"
-            android:layout_weight="0.7"
-            android:id="@+id/userTitle"
-            android:gravity="center"
-            android:layout_gravity="center_vertical"
-            android:textColor="@color/white"
-            android:textSize="14sp"
-            android:layout_marginLeft="16dp"
-            />
-
-        <com.google.android.material.textview.MaterialTextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginRight="8dp"
-            android:gravity="center"
-            android:text="User 1"
-            android:layout_gravity="center"
-            android:id="@+id/userText"
-            android:textColor="@color/white"
-            android:textSize="16sp"
-            />
+        android:layout_marginTop="40dp"
+        android:layout_marginLeft="20dp"
+        android:id="@+id/userIcon"
+        />
 
 
-    </LinearLayout>
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/user"
+        android:id="@+id/userTitle"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="@id/userIcon"
+        app:layout_constraintLeft_toRightOf="@id/userIcon"
+        android:layout_gravity="center_vertical"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        android:layout_marginLeft="16dp"
+        />
 
-    <androidx.core.widget.NestedScrollView
-        android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/llUser"
-        android:layout_marginTop="74dp"
-        app:layout_constraintLeft_toLeftOf="@id/llUser"
-        app:layout_constraintRight_toRightOf="@id/llUser"
-        android:layout_height="wrap_content">
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="start"
+        tools:text="@string/user_1"
+        app:layout_constraintBottom_toBottomOf="@id/userIcon"
+        android:id="@+id/userText"
+        android:textColor="@color/white"
+        app:layout_constraintLeft_toRightOf="@id/userIcon"
+        android:layout_marginTop="10dp"
+        android:textSize="24sp"
+        android:layout_marginLeft="16dp"
+        />
+
+
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_marginHorizontal="24dp"
             android:layout_height="match_parent"
+            android:layout_marginTop="130dp"
+            android:background="@drawable/home_back"
             >
 
 
 
             <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="80dp"
+                android:layout_width="140dp"
+                android:layout_height="160dp"
                 android:id="@+id/taskMenu"
                 android:orientation="vertical"
                 android:clickable="true"
                 android:focusable="true"
+                android:gravity="center"
+                android:layout_marginTop="44dp"
+                android:elevation="2dp"
+                android:layout_marginLeft="50dp"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@id/menu2"
                 app:layout_constraintTop_toTopOf="parent"
                 android:background="@drawable/menu_back"
                 >
 
                 <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/task_icon"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@drawable/clipboard_list"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
                     />
 
                <TextView
                    android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
-                   android:text="Task 1"
+                   android:text="@string/tasks"
                    android:layout_gravity="center"
                    android:layout_marginTop="8dp"
                    android:textSize="16sp"
@@ -97,53 +96,27 @@
 
                    />
 
-            </LinearLayout>
-
-
-
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="80dp"
-                android:layout_marginStart="24dp"
-                android:id="@+id/menu2"
-                android:clickable="true"
-                android:focusable="true"
-                android:orientation="vertical"
-                app:layout_constraintLeft_toRightOf="@id/taskMenu"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:background="@drawable/menu_back"
-                >
-
-                <ImageView
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:src="@drawable/task_icon"
-                    android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="8dp"
-                    />
-
-                <TextView
+                <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Task 2"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="8dp"
-                    android:textSize="16sp"
+                    android:textColor="@color/title_color_1"
+                    tools:text="1"
+                    android:id="@+id/taskSize"
+                    android:textSize="14sp"
+                    android:fontFamily="@font/sf_pro_display"
+                    android:layout_marginTop="4dp"
                     android:textStyle="bold"
-                    android:textColor="@color/icon_color"
-
                     />
+
             </LinearLayout>
+
+
+
 
 
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.core.widget.NestedScrollView>
 
 
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "558648683687",
+    "project_id": "osm-mobile-e07b4",
+    "storage_bucket": "osm-mobile-e07b4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:558648683687:android:e30bbb88d4bdc9280dbf82",
+        "android_client_info": {
+          "package_name": "uz.duol.sizscanner"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDgxi_oWD0bO9RBMmn-BzJzILB3Ni73WZA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,4 +1,4 @@
-package uz.duol.sizscanner.presentation.ui
+package uz.duol.sizscanner.presentation.ui.dialog
 
 import android.app.AlertDialog
 import android.app.ProgressDialog
@@ -10,20 +10,27 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.LayoutInflater
 import android.view.View
-import androidx.fragment.app.Fragment
+import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import device.common.DecodeResult
 import device.common.DecodeStateCallback
 import device.common.ScanConst
 import device.sdk.ScanManager
 import uz.duol.sizscanner.R
-import uz.duol.sizscanner.databinding.ScannerScreenBinding
+import uz.duol.sizscanner.databinding.ScannerBtmSheetDialogBinding
+import uz.duol.sizscanner.presentation.viewmodel.checkKM.CheckKMViewModel
+import uz.duol.sizscanner.presentation.viewmodel.checkKM.CheckKMViewModelImpl
 
 @AndroidEntryPoint
-class ScannerScreen : Fragment(R.layout.scanner_screen) {
-    private val binding by viewBinding(ScannerScreenBinding::bind)
+class ScanningProductDialog : BottomSheetDialogFragment() {
+    private val binding by viewBinding(ScannerBtmSheetDialogBinding::bind)
+    private val viewModel: CheckKMViewModel by viewModels<CheckKMViewModelImpl>()
     private var mDecodeResult: DecodeResult? = null
     private var mScanner: ScanManager? = null
     private val mHandler by lazy { Handler() }
@@ -31,8 +38,18 @@ class ScannerScreen : Fragment(R.layout.scanner_screen) {
     private var mStateCallback: DecodeStateCallback? = null
     private var mWaitDialog: ProgressDialog? = null
     private var mDialog: AlertDialog? = null
-    private var mKeyLock = false
     private var mBackupResultType = ScanConst.ResultType.DCD_RESULT_COPYPASTE
+
+
+    var closeIconClick:(() -> Unit)? = null
+
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? = inflater.inflate(R.layout.scanner_btm_sheet_dialog, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -60,100 +77,26 @@ class ScannerScreen : Fragment(R.layout.scanner_screen) {
             }
         }
 
-
-
-        binding.checkAutoscan.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (mScanner != null) {
-                if (isChecked) {
-                    mScanner!!.aDecodeSetTriggerMode(ScanConst.TriggerMode.DCD_TRIGGER_MODE_AUTO)
-                } else {
-                    mScanner!!.aDecodeSetTriggerMode(ScanConst.TriggerMode.DCD_TRIGGER_MODE_ONESHOT)
-                }
-            }
-        }
-
-        binding.checkEvent.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (mScanner != null) {
-                if (isChecked) {
-                    mScanner!!.aDecodeSetResultType(ScanConst.ResultType.DCD_RESULT_EVENT)
-                } else {
-                    mScanner!!.aDecodeSetResultType(ScanConst.ResultType.DCD_RESULT_USERMSG)
-                }
-            }
-        }
-
-        binding.checkBeep.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (mScanner != null) {
-                if (isChecked) {
-                    mScanner!!.aDecodeSetBeepEnable(1)
-                } else {
-                    mScanner!!.aDecodeSetBeepEnable(0)
-                }
-            }
+        binding.closeIcon.setOnClickListener {
+            closeIconClick?.invoke()
         }
 
 
-        binding.buttonScanOn.setOnClickListener {
-            if (mScanner != null) {
-                mScanner!!.aDecodeSetTriggerOn(1)
-            }
-        }
+        viewModel.successCheckKMLiveData.observe(viewLifecycleOwner, successCheckKMObserver)
+        viewModel.errorMessageLiveData.observe(viewLifecycleOwner, errorMessageObserver)
 
-
-        binding.buttonScanOff.setOnClickListener {
-            if (mScanner != null) {
-                if (binding.checkAutoscan.isChecked) {
-                    mScanner!!.aDecodeSetTriggerMode(ScanConst.TriggerMode.DCD_TRIGGER_MODE_ONESHOT)
-                }
-
-                mScanner!!.aDecodeSetTriggerOn(0)
-
-                if (binding.checkAutoscan.isChecked) {
-                    mScanner!!.aDecodeSetTriggerMode(ScanConst.TriggerMode.DCD_TRIGGER_MODE_AUTO)
-                }
-            }
-        }
-
-
-        binding.buttonEnalbeUpc.setOnClickListener {
-            if (mScanner != null) {
-                mScanner!!.aDecodeSymSetEnable(ScanConst.SymbologyID.DCD_SYM_UPCA, 1)
-            }
-        }
-
-
-        binding.buttonDisalbeUpc.setOnClickListener {
-            if (mScanner != null) {
-                mScanner!!.aDecodeSymSetEnable(ScanConst.SymbologyID.DCD_SYM_UPCA, 0)
-            }
-        }
-
-        binding.buttonPropEnable.setOnClickListener {
-            if (mScanner != null) {
-                val symID = ScanConst.SymbologyID.DCD_SYM_UPCA
-                val propCnt = mScanner!!.aDecodeSymGetLocalPropCount(symID)
-                var propIndex = 0
-
-                for (i in 0 until propCnt) {
-                    val propName = mScanner!!.aDecodeSymGetLocalPropName(symID, i)
-                    if (propName == "Send Check Character") {
-                        propIndex = i
-                        break
-                    }
-                }
-
-                if (mKeyLock == false) {
-                    binding.buttonPropEnable.setText(R.string.property_enable)
-                    mKeyLock = true
-                    mScanner!!.aDecodeSymSetLocalPropEnable(symID, propIndex, 0)
-                } else {
-                    binding.buttonPropEnable.setText(R.string.property_disable)
-                    mKeyLock = false
-                    mScanner!!.aDecodeSymSetLocalPropEnable(symID, propIndex, 1)
-                }
-            }
-        }
     }
+
+
+    private val successCheckKMObserver = Observer<Boolean?>{
+        Log.d("PPP", " success km: $it")
+    }
+
+    private val errorMessageObserver = Observer<String>{
+        Log.d("PPP", " error km: $it")
+    }
+
+
 
 
     private fun initScanner() {
@@ -161,17 +104,6 @@ class ScannerScreen : Fragment(R.layout.scanner_screen) {
             mScanner!!.aRegisterDecodeStateCallback(mStateCallback)
             mBackupResultType = mScanner!!.aDecodeGetResultType()
             mScanner!!.aDecodeSetResultType(ScanConst.ResultType.DCD_RESULT_USERMSG)
-            binding.checkEvent.isChecked = false
-            if (mScanner!!.aDecodeGetTriggerMode() == ScanConst.TriggerMode.DCD_TRIGGER_MODE_AUTO) {
-                binding.checkAutoscan.isChecked = true
-            } else {
-                binding.checkAutoscan.isChecked = false
-            }
-            if (mScanner!!.aDecodeGetBeepEnable() == 1) {
-                binding.checkBeep.isChecked = true
-            } else {
-                binding.checkBeep.isChecked = false
-            }
         }
     }
 
@@ -192,10 +124,10 @@ class ScannerScreen : Fragment(R.layout.scanner_screen) {
 
             dialog.setButton(
                 AlertDialog.BUTTON_NEGATIVE, getString(android.R.string.cancel)
-            ) { dialog, which -> requireActivity().finish() }
+            ) { _, _ -> requireActivity().finish() }
             dialog.setButton(
                 AlertDialog.BUTTON_POSITIVE, getString(android.R.string.ok)
-            ) { dialog, which ->
+            ) { _, _ ->
                 val intent = Intent(ScanConst.LAUNCH_SCAN_SETTING_ACITON)
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                 startActivity(intent)
@@ -258,7 +190,10 @@ class ScannerScreen : Fragment(R.layout.scanner_screen) {
                         mScanner!!.aDecodeGetResult(mDecodeResult!!.recycle())
                         binding.textviewBarType.text = mDecodeResult!!.symName
                         binding.textviewScanResult.text = mDecodeResult.toString()
-                        Log.d("TTT", "decodeResult: ${mDecodeResult.toString()}")
+                        if (getString(R.string.read_fail)!= mDecodeResult.toString()){
+                            viewModel.checkKMFromServer(mDecodeResult.toString())
+                        }
+                        Log.d("DDD", "scan result: ${mDecodeResult.toString()}")
 
                     } else if (ScanConst.INTENT_EVENT == intent.action) {
                         val result =

@@ -2,12 +2,21 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="screen_back_color">#FDFDFF</color>
+    <color name="screen_back_color">#F0F4F7</color>
     <color name="stroke_color">#E8EEF4</color>
     <color name="stroke_color1">#DBDFDE</color>
     <color name="title_color_1">#7A889B</color>
     <color name="menu_back_color">#F4F6F5</color>
     <color name="user_back">#58A6E3</color>
     <color name="icon_color">#446098</color>
+    <color name="qty_marking_color">#B53762</color>
+    <color name="stroke_dot_color">#8BE7E7E7</color>
+    <color name="text_color">#262E3A</color>
+    <color name="red_color">#E32F27</color>
+    <color name="green_color">#8BC34A</color>
+    <color name="status_bar_color">#0E90F8</color>
+    <color name="product_name_color">#305597</color>
+    <color name="process_status_text">#D3A245</color>
+    <color name="closed_status_text">#1BA8E5</color>
 
 </resources>
