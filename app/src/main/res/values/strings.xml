@@ -46,6 +46,11 @@
     <string name="error_internet">Проблема с интернетом</string>
     <string name="read_fail">READ_FAIL</string>
     <string name="more">Подробный</string>
+    <string name="enable_scanner_dialog">Ваш сканер отключен. Вы хотите включить его?</string>
+    <string name="synchronize">Синхронизировать</string>
+    <string name="ask_synchronize_failed_km">Хотите ли вы  повторно отправлять КМ, которые не удалось отправить на серверe?</string>
+    <string name="no">Нет</string>
+    <string name="yes">Да</string>
 
 
     <array name="tab_list">

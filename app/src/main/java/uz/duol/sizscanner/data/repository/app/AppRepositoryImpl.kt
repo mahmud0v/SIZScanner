@@ -1,14 +1,13 @@
 package uz.duol.sizscanner.data.repository.app
 
 import retrofit2.Response
-import uz.duol.sizscanner.BuildConfig.BASE_URL
 import uz.duol.sizscanner.data.remote.ApiService
 import uz.duol.sizscanner.data.remote.response.ApiResponse
+import uz.duol.sizscanner.data.remote.response.CheckKMResponse
 import uz.duol.sizscanner.data.remote.response.CheckPinResponse
 import uz.duol.sizscanner.data.remote.response.PageList
 import uz.duol.sizscanner.data.remote.response.TaskItemResponse
 import uz.duol.sizscanner.data.remote.response.TaskResponse
-import uz.duol.sizscanner.data.remote.response.TaskSizeResponse
 import javax.inject.Inject
 
 class AppRepositoryImpl @Inject constructor(
@@ -47,13 +46,20 @@ class AppRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun checkKMFromServer(km: String?): Response<ApiResponse<Boolean>> {
+    override suspend fun checkKMFromServer(kmList: List<String?>, transactionId:Int?): Response<ApiResponse<CheckKMResponse>> {
         return apiService.checkKMFromServer(
             "osm/mobile-user/sync-status",
-            km
+            kmList,
+            transactionId
         )
     }
 
+    override suspend fun taskState(transactionId: Int?): Response<ApiResponse<Boolean>> {
+        return apiService.taskState(
+            "osm/mobile-user/sync-closed",
+            transactionId
+        )
+    }
 
 
 }

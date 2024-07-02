@@ -52,7 +52,7 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
         viewModel.newTaskList(page++, pageSize)
 
         taskAdapter.setLoader {
-            if (page <= maxPage-1)
+            if (page <= maxPage)
                 viewModel.newTaskList(page++, pageSize)
         }
 
@@ -71,12 +71,14 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
 
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private val newTaskListObserver = Observer<List<TaskResponse>?>{
         binding.swipeRefresh.isRefreshing = false
         it?.let {
             taskList.addAll(it)
             Log.d("DDD", "task list: $taskList")
             taskAdapter.differ.submitList(taskList)
+            taskAdapter.notifyDataSetChanged()
         }
 
         if (taskList.isEmpty() && taskAdapter.differ.currentList.isEmpty()) {

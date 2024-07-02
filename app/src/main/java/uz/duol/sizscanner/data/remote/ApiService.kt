@@ -6,6 +6,7 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 import retrofit2.http.Url
 import uz.duol.sizscanner.data.remote.response.ApiResponse
+import uz.duol.sizscanner.data.remote.response.CheckKMResponse
 import uz.duol.sizscanner.data.remote.response.CheckPinResponse
 import uz.duol.sizscanner.data.remote.response.PageList
 import uz.duol.sizscanner.data.remote.response.TaskItemResponse
@@ -16,32 +17,41 @@ interface ApiService {
 
     @POST
     suspend fun checkPin(
-        @Url url:String,
-        @Query("pinCode") pin:String
+        @Url url: String,
+        @Query("pinCode") pin: String
     ): Response<ApiResponse<CheckPinResponse>>
 
 
-    @GET
+    @POST
     suspend fun newTaskList(
         @Url url: String,
-        @Query("page") page:Int,
-        @Query("size") size:Int
+        @Query("page") page: Int,
+        @Query("size") size: Int
     ): Response<ApiResponse<PageList<List<TaskResponse>>>>
 
-    @GET
+
+    @POST
     suspend fun taskItemList(
         @Url url: String,
-        @Query("transactionId") taskId:Int?,
+        @Query("transactionId") taskId: Int?,
         @Query("page") page: Int,
         @Query("size") size: Int
     ): Response<ApiResponse<PageList<List<TaskItemResponse>>>>
 
-    @GET
+
+    @POST
     suspend fun checkKMFromServer(
         @Url url: String,
-        @Query("km") km:String?
-    ): Response<ApiResponse<Boolean>>
+        @Query("kmList") kmList: List<String?>,
+        @Query("transactionId") transactionId: Int?
+    ): Response<ApiResponse<CheckKMResponse>>
 
+
+    @POST
+    suspend fun taskState(
+        @Url url: String,
+        @Query("transactionId") taskId: Int?
+    ):Response<ApiResponse<Boolean>>
 
 
 }

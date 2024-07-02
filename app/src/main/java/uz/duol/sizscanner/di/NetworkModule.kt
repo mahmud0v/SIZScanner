@@ -64,8 +64,7 @@ class NetworkModule {
     @[Provides Singleton]
     fun getApiService(retrofit: Retrofit): ApiService = retrofit.create(ApiService::class.java)
 
-    //010478011659005821fCMV20EvM1!Mmpg*CD4" 91UZF0 92V05OUO6BxOjRjAuyrdmEXPf5GPmseJcoNBPBPGR9cdw=
-    //010478011659005821fCMV20EvM1!Mmpg*CD4" 91UZF0 92V05OUO6BxOjRjAuyrdmEXPf5GPmseJcoNBPBPGR9cdw=
+
 
 
 }

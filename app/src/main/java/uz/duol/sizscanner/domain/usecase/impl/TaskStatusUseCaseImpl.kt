@@ -8,23 +8,22 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import uz.duol.sizscanner.R
-import uz.duol.sizscanner.data.remote.response.CheckKMResponse
 import uz.duol.sizscanner.data.repository.app.AppRepository
 import uz.duol.sizscanner.data.sharedpreference.AppSharedPreference
-import uz.duol.sizscanner.domain.usecase.CheckKMUsaCase
+import uz.duol.sizscanner.domain.usecase.TaskStatusUseCase
 import uz.duol.sizscanner.utils.isConnected
 import javax.inject.Inject
 
-class CheckKMUsaCaseImpl @Inject constructor(
+class TaskStatusUseCaseImpl @Inject constructor(
     private val appRepository: AppRepository,
     private val sharedPreference: AppSharedPreference,
     @ApplicationContext val context: Context
-) : CheckKMUsaCase {
+) : TaskStatusUseCase {
 
-    override fun checkKMFromServer(kmList: List<String?>, transactionId:Int?): Flow<Result<CheckKMResponse?>> {
+    override fun taskStatus(transactionId: Int?): Flow<Result<Boolean?>> {
         return flow {
             if (isConnected()) {
-                val response = appRepository.checkKMFromServer(kmList, transactionId)
+                val response = appRepository.taskState(transactionId)
                 when (response.body()?.status) {
                     in 200..209 -> {
                         response.body()?.newToken?.let {
@@ -45,6 +44,6 @@ class CheckKMUsaCaseImpl @Inject constructor(
         }.catch {
             emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
         }.flowOn(Dispatchers.IO)
-
     }
+
 }

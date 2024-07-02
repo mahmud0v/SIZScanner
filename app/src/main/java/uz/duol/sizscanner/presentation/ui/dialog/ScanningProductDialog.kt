@@ -23,6 +23,7 @@ import device.common.DecodeStateCallback
 import device.common.ScanConst
 import device.sdk.ScanManager
 import uz.duol.sizscanner.R
+import uz.duol.sizscanner.data.remote.response.CheckKMResponse
 import uz.duol.sizscanner.databinding.ScannerBtmSheetDialogBinding
 import uz.duol.sizscanner.presentation.viewmodel.checkKM.CheckKMViewModel
 import uz.duol.sizscanner.presentation.viewmodel.checkKM.CheckKMViewModelImpl
@@ -88,7 +89,7 @@ class ScanningProductDialog : BottomSheetDialogFragment() {
     }
 
 
-    private val successCheckKMObserver = Observer<Boolean?>{
+    private val successCheckKMObserver = Observer<CheckKMResponse?>{
         Log.d("PPP", " success km: $it")
     }
 
@@ -191,7 +192,7 @@ class ScanningProductDialog : BottomSheetDialogFragment() {
                         binding.textviewBarType.text = mDecodeResult!!.symName
                         binding.textviewScanResult.text = mDecodeResult.toString()
                         if (getString(R.string.read_fail)!= mDecodeResult.toString()){
-                            viewModel.checkKMFromServer(mDecodeResult.toString())
+//                            viewModel.checkKMFromServer(mDecodeResult.toString())
                         }
                         Log.d("DDD", "scan result: ${mDecodeResult.toString()}")
 

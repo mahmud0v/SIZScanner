@@ -68,5 +68,4 @@ class TaskItemListAdapter : RecyclerView.Adapter<TaskItemListAdapter.ViewHolder>
     }
 
 
-
 }

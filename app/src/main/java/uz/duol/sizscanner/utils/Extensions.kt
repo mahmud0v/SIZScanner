@@ -7,7 +7,9 @@ import android.os.Build
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import by.kirich1409.viewbindingdelegate.internal.findRootView
 import com.google.android.material.snackbar.Snackbar
 import java.text.SimpleDateFormat
@@ -54,4 +56,17 @@ fun dateFormat(date: Date?): String {
     } else {
         ""
     }
+}
+
+fun Fragment.backPressDispatcher() {
+    val callBack = object : OnBackPressedCallback(true) {
+        override fun handleOnBackPressed() {
+            requireActivity().supportFragmentManager.popBackStack(
+                "Screen",
+                FragmentManager.POP_BACK_STACK_INCLUSIVE
+            )
+            requireActivity().finish()
+        }
+    }
+    requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callBack)
 }

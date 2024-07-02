@@ -96,7 +96,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sf_pro_display"
-                android:text="Общий калечество маркировка"
+                android:text="Общий кол-во маркировка"
                 android:textAlignment="center"
                 android:textColor="#262E3A"
                 android:layout_marginHorizontal="10dp"
@@ -149,7 +149,7 @@
 
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/successCountText"
+                android:id="@+id/failedCountText"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/sf_pro_display"
                 android:paddingBottom="10dp"
@@ -191,8 +191,9 @@
                 app:fontFamily="@font/sf_pro_display" />
 
             <com.google.android.material.textview.MaterialTextView
-                android:id="@+id/failedCountText"
+                android:id="@+id/successCountText"
                 android:layout_width="wrap_content"
+
                 android:layout_height="wrap_content"
                 android:paddingBottom="10dp"
                 android:paddingTop="4dp"
