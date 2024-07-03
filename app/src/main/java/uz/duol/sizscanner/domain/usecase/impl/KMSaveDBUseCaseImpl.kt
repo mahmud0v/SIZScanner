@@ -18,10 +18,10 @@ class KMSaveDBUseCaseImpl @Inject constructor(
     @ApplicationContext val context: Context
 ) : KMSaveDBUseCase {
 
-    override fun insertKM(kmModel: KMModel): Flow<Result<Unit>> {
+    override fun insertKM(kmModel: KMModel): Flow<Result<Long>> {
        return flow {
-           appDatabaseRepository.insertKM(kmModel)
-           emit(Result.success(Unit))
+           val response = appDatabaseRepository.insertKM(kmModel)
+           emit(Result.success(response))
        }.catch {
            emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
        }.flowOn(Dispatchers.IO)

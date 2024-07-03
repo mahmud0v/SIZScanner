@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.flowOn
 import uz.duol.sizscanner.R
 import uz.duol.sizscanner.data.remote.response.CheckKMResponse
 import uz.duol.sizscanner.data.repository.app.AppRepository
+import uz.duol.sizscanner.data.repository.db.AppDatabaseRepository
 import uz.duol.sizscanner.data.sharedpreference.AppSharedPreference
 import uz.duol.sizscanner.domain.usecase.CheckKMUsaCase
 import uz.duol.sizscanner.utils.isConnected
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class CheckKMUsaCaseImpl @Inject constructor(
     private val appRepository: AppRepository,
     private val sharedPreference: AppSharedPreference,
+    private val appDatabaseRepository: AppDatabaseRepository,
     @ApplicationContext val context: Context
 ) : CheckKMUsaCase {
 
@@ -46,5 +48,14 @@ class CheckKMUsaCaseImpl @Inject constructor(
             emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
         }.flowOn(Dispatchers.IO)
 
+    }
+
+    override fun allTaskGtinKM(taskId: Int?, gtin: String?): Flow<Result<Int?>> {
+        return flow<Result<Int?>> {
+            val response = appDatabaseRepository.allTaskGtinKM(taskId, gtin)
+            emit(Result.success(response))
+        }.catch {
+            emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
+        }.flowOn(Dispatchers.IO)
     }
 }
