@@ -119,6 +119,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
 
         taskListLastItemListener = {
             viewModel.getAllGtinDB(navArg.taskInfo.id)
+            // new commit
         }
 
 
@@ -187,6 +188,8 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
             start = !start
             if (start) {
                 binding.beginBtn.text = getString(R.string.done)
+                binding.beginBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(),R.color.red_dark_color)
+                // dev commit
                 binding.beginBtn.backgroundTintList =
                     ContextCompat.getColorStateList(requireContext(), R.color.red_dark_color)
             } else {
