@@ -21,7 +21,7 @@
     <string name="slash" translatable="false">/</string>
     <string name="task_id">Ид задания</string>
     <string name="all_marking_qty_title">Kол-во марк:</string>
-    <string name="start">Выполният</string>
+    <string name="start">Выполниять</string>
     <string name="done">Завершить</string>
     <string name="task_list">Список заданий</string>
     <string name="no_scanned">Не сканируется</string>
@@ -51,6 +51,8 @@
     <string name="ask_synchronize_failed_km">Хотите ли вы  повторно отправлять КМ, которые не удалось отправить на серверe?</string>
     <string name="no">Нет</string>
     <string name="yes">Да</string>
+    <string name="process">Процесс</string>
+    <string name="closed">Закрыто</string>
 
 
     <array name="tab_list">

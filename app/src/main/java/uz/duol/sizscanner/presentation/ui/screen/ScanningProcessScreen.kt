@@ -194,6 +194,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
             TaskStatus.PROCESS.name -> {
                 binding.taskStatus.visible()
                 binding.taskStatus.setBackgroundResource(R.drawable.process_status_back)
+                binding.taskStatus.setText(R.string.process)
                 binding.taskStatus.setTextColor(
                     ContextCompat.getColor(
                         binding.root.context,
@@ -205,6 +206,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
             TaskStatus.CLOSED.name -> {
                 binding.taskStatus.visible()
                 binding.taskStatus.setBackgroundResource(R.drawable.closed_status_back)
+                binding.taskStatus.setText(R.string.closed)
                 binding.taskStatus.setTextColor(
                     ContextCompat.getColor(
                         binding.root.context,

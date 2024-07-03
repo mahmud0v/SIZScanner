@@ -49,12 +49,14 @@ class TasksListAdapter : RecyclerView.Adapter<TasksListAdapter.ViewHolder>() {
                 TaskStatus.PROCESS.name -> {
                     binding.taskStatus.visible()
                     binding.taskStatus.setBackgroundResource(R.drawable.process_status_back)
+                    binding.taskStatus.text = binding.root.context.getString(R.string.process)
                     binding.taskStatus.setTextColor(ContextCompat.getColor(binding.root.context, R.color.process_status_text))
                 }
 
                 TaskStatus.CLOSED.name -> {
                     binding.taskStatus.visible()
                     binding.taskStatus.setBackgroundResource(R.drawable.closed_status_back)
+                    binding.taskStatus.text = binding.root.context.getString(R.string.closed)
                     binding.taskStatus.setTextColor(ContextCompat.getColor(binding.root.context, R.color.closed_status_text))
                 }
 
@@ -65,6 +67,10 @@ class TasksListAdapter : RecyclerView.Adapter<TasksListAdapter.ViewHolder>() {
             }
 
             binding.moreBtn.setOnClickListener {
+                clickItem?.invoke(taskInfo)
+            }
+
+            binding.llTaskItem.setOnClickListener {
                 clickItem?.invoke(taskInfo)
             }
 
