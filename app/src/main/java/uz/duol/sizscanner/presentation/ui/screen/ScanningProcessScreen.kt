@@ -147,6 +147,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
             if (start) {
                 binding.beginBtn.text = getString(R.string.done)
                 binding.beginBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(),R.color.red_dark_color)
+                // dev commit
             } else {
                 viewModel.taskStatus(navArg.taskInfo.id)
 //                binding.beginBtn.text = getString(R.string.start)
