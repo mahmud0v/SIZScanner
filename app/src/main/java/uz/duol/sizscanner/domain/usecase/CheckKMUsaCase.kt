@@ -7,4 +7,6 @@ interface CheckKMUsaCase {
 
     fun checkKMFromServer(kmList:List<String?>, transactionId:Int?): Flow<Result<CheckKMResponse?>>
 
+    fun allTaskGtinKM(taskId: Int?, gtin: String?):Flow<Result<Int?>>
+
 }

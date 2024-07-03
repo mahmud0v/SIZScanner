@@ -157,7 +157,7 @@
                 android:textColor="@color/red_color"
                 android:textSize="18sp"
                 app:fontFamily="@font/sf_pro_display"
-                tools:text="7" />
+                tools:text="0" />
 
 
         </LinearLayout>

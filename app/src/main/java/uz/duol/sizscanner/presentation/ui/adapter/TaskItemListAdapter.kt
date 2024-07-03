@@ -16,7 +16,7 @@ import uz.duol.sizscanner.databinding.TaskItemBinding
 
 class TaskItemListAdapter : RecyclerView.Adapter<TaskItemListAdapter.ViewHolder>() {
 
-    var clickItem:((TaskItemResponse) -> Unit)? = null
+    var clickItem: ((TaskItemResponse) -> Unit)? = null
     private var loader: (() -> Unit)? = null
     fun setLoader(block: () -> Unit) {
         loader = block
@@ -38,13 +38,13 @@ class TaskItemListAdapter : RecyclerView.Adapter<TaskItemListAdapter.ViewHolder>
         @SuppressLint("SetTextI18n")
         fun bind(position: Int) {
             val taskItemInfo = differ.currentList[position]
-            binding.productName.text = taskItemInfo.productName?:""
-            binding.gtinName.text = taskItemInfo.gtin?:""
-            binding.allCountText.text = (taskItemInfo.totalKM?:"").toString()
-            if (taskItemInfo.totalKM!=null && taskItemInfo.soldKM!=null){
-                binding.failedCountText.text = (taskItemInfo.totalKM-taskItemInfo.soldKM).toString()
-            }
-            binding.successCountText.text = (taskItemInfo.soldKM?:"").toString()
+
+            binding.productName.text = taskItemInfo.productName ?: ""
+            binding.gtinName.text = taskItemInfo.gtin ?: ""
+            binding.allCountText.text = (taskItemInfo.totalKM ?: "").toString()
+            binding.successCountText.text = (taskItemInfo.soldKM ?: "").toString()
+            binding.failedCountText.text = (taskItemInfo.waitingKm ?: "").toString()
+
             binding.llTaskItem.setOnClickListener {
                 clickItem?.invoke(taskItemInfo)
             }

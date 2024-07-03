@@ -10,13 +10,16 @@ import uz.duol.sizscanner.data.database.entity.KMModel
 @Dao
 interface ProductDao {
 
-   @Query("SELECT km FROM KMModel where km_status_server = 'FAILED' AND task_id =:taskId")
-   suspend fun failedServerKMList(taskId:Int?) : List<String?>
+   @Query("SELECT km FROM KMModel WHERE km_status_server = 'FAILED' AND task_id =:taskId")
+   suspend fun failedServerKMList(taskId: Int?): List<String?>
 
    @Insert(onConflict = OnConflictStrategy.REPLACE)
-   suspend fun insertKM(kmModel: KMModel)
+   suspend fun insertKM(kmModel: KMModel):Long
 
    @Update
    suspend fun updateKM(updateKMModel: KMModel)
+
+   @Query("SELECT Count(*) FROM KMModel WHERE gtin=:gtin AND task_id=:taskId")
+   suspend fun allTaskGtinKM(taskId: Int?, gtin: String?):Int?
 
 }

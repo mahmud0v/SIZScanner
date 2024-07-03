@@ -53,6 +53,7 @@
     <string name="yes">Да</string>
     <string name="process">Процесс</string>
     <string name="closed">Закрыто</string>
+    <string name="limit_scanner_km">%s отсканировал достаточное количество километров для продукта</string>
 
 
     <array name="tab_list">

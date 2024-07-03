@@ -7,13 +7,11 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
-import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -28,7 +26,10 @@ import device.common.DecodeStateCallback
 import device.common.ScanConst
 import device.sdk.ScanManager
 import uz.duol.sizscanner.R
+import uz.duol.sizscanner.data.database.entity.GtinEntity
 import uz.duol.sizscanner.data.database.entity.KMModel
+import uz.duol.sizscanner.data.model.ExistsKMInfo
+import uz.duol.sizscanner.data.model.InsertKMInfo
 import uz.duol.sizscanner.data.remote.response.CheckKMResponse
 import uz.duol.sizscanner.data.remote.response.TaskItemResponse
 import uz.duol.sizscanner.databinding.ScanningProcessScreenBinding
@@ -38,6 +39,7 @@ import uz.duol.sizscanner.presentation.viewmodel.checkKM.CheckKMViewModelImpl
 import uz.duol.sizscanner.presentation.viewmodel.task.TaskItemListViewModel
 import uz.duol.sizscanner.presentation.viewmodel.task.TaskItemListViewModelImpl
 import uz.duol.sizscanner.utils.KMStatusServer
+import uz.duol.sizscanner.utils.MarkingProductStatus
 import uz.duol.sizscanner.utils.TaskStatus
 import uz.duol.sizscanner.utils.gone
 import uz.duol.sizscanner.utils.snackBar
@@ -60,6 +62,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
     private val taskItemListAdapter by lazy { TaskItemListAdapter() }
     private val navArg: ScanningProcessScreenArgs by navArgs()
     private val taskItemList = ArrayList<TaskItemResponse>()
+    private var taskListLastItemListener: (() -> Unit)? = null
     private val kmList = ArrayList<String?>()
     private var page = 0
     private var pageSize = 10
@@ -79,7 +82,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
         viewModel.taskItemList(navArg.taskInfo.id, page++, pageSize)
 
         taskItemListAdapter.setLoader {
-            if (page <= maxPage)
+            if (page < maxPage)
                 viewModel.taskItemList(navArg.taskInfo.id, page++, pageSize)
 
         }
@@ -114,18 +117,9 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
             }
         }
 
-        val callBack = object : OnBackPressedCallback(true){
-
-            override fun handleOnBackPressed() {
-                viewModel.failedServerKMList(navArg.taskInfo.id)
-
-            }
-
+        taskListLastItemListener = {
+            viewModel.getAllGtinDB(navArg.taskInfo.id)
         }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callBack)
-
-
 
 
         viewModel2.successCheckKMLiveData.observe(viewLifecycleOwner, successCheckKMObserver)
@@ -136,9 +130,56 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
         viewModel.errorMessageLiveData.observe(viewLifecycleOwner, errorMessageObserver)
         viewModel.progressLoadingLiveData.observe(viewLifecycleOwner, progressObserver)
         viewModel.taskStatusLiveData.observe(viewLifecycleOwner, taskStatusObserver)
-        viewModel.failedServerKMListLiveData.observe(viewLifecycleOwner, failedServerKMListObserver )
+        viewModel.failedServerKMListLiveData.observe(viewLifecycleOwner, failedServerKMListObserver)
         viewModel.taskMainStatusLiveData.observe(viewLifecycleOwner, taskMainStatusObserver)
-        viewModel.errorMessageFailedServerKMListLiveData.observe(viewLifecycleOwner,errorMessageFailedServerKMListObserver )
+        viewModel.errorMessageFailedServerKMListLiveData.observe(
+            viewLifecycleOwner,
+            errorMessageFailedServerKMListObserver
+        )
+        viewModel.editWaitingKMLiveData.observe(viewLifecycleOwner, editWaitingKMObserver)
+        viewModel.getAllGtinDBLiveData.observe(viewLifecycleOwner, getAllGtinDBObserver)
+        viewModel.addWaitingKMSaveDB.observe(viewLifecycleOwner, addWaitingKMSaveDBObserver)
+        viewModel.existKMLiveData.observe(viewLifecycleOwner, existKMLiveDataObserver)
+
+        viewModel2.getWaitingKMCountLiveData.observe(
+            viewLifecycleOwner,
+            Observer {
+                if (it.waitingGtinCount != null && it.differenceKM !=null){
+                    if (it.differenceKM > it.waitingGtinCount){
+                        val dbKm = it.waitingGtinCount+1
+                        viewModel.editWaitingKM(
+                            waitingKM = dbKm,
+                            it.gtin,
+                            it.taskId
+                        )
+                    } else {
+                        snackBar(getString(R.string.limit_scanner_km, it.gtin))
+                    }
+                } else {
+                    snackBar(getString(R.string.unknown_error))
+                }
+
+            })
+
+        viewModel.existGtinLiveData.observe(viewLifecycleOwner, Observer {
+            if (it?.existDB == 1) {
+//                Log.d("RRRR", "$it")
+                viewModel.editGtinTotalSoldKM(it.id, it.totalKM, it.soldKM)
+            } else {
+//                Log.d("RRRR", "$it")
+                viewModel2.insertGtin(
+                    GtinEntity(
+                        id = it?.id,
+                        gtin = it?.gtin,
+                        productName = it?.productName,
+                        totalKM = it?.totalKM,
+                        soldKm = it?.soldKM,
+                        conditionStatus = it?.conditionStatus,
+                        taskId = navArg.taskInfo.id
+                    )
+                )
+            }
+        })
 
 
 
@@ -146,31 +187,90 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
             start = !start
             if (start) {
                 binding.beginBtn.text = getString(R.string.done)
-                binding.beginBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(),R.color.red_dark_color)
-                // dev commit
+                binding.beginBtn.backgroundTintList =
+                    ContextCompat.getColorStateList(requireContext(), R.color.red_dark_color)
             } else {
                 viewModel.taskStatus(navArg.taskInfo.id)
-//                binding.beginBtn.text = getString(R.string.start)
             }
         }
 
 
     }
 
-    private val errorMessageFailedServerKMListObserver = Observer<String>{
+    private val addWaitingKMSaveDBObserver = Observer<InsertKMInfo>{
+        if (it.rowId != null && it.rowId > 0) {
+            Log.d("YYYY", "rowId: ${it.rowId}")
+            viewModel2.getWaitingKMCount(
+                it.km?.substring(0, 16),
+                navArg.taskInfo.id
+            )
+        }
+
+    }
+
+    private val editWaitingKMObserver = Observer<Int>{
+        viewModel.getAllGtinDB(navArg.taskInfo.id)
+    }
+
+    private val existKMLiveDataObserver = Observer<ExistsKMInfo>{
+        if (it.exist == 0){ // try catch
+            viewModel.insertKMDB(
+                KMModel(
+                    km = it.km!!,
+                    taskId = navArg.taskInfo.id,
+                    kmStatusServer = MarkingProductStatus.SCANNED_NOT_VERIFIED.name,
+                    gtin = it.km!!.substring(0, 16)
+                )
+            )
+        }
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    private val getAllGtinDBObserver = Observer<List<GtinEntity>> {
+        taskItemList.clear()
+        it.map {
+            taskItemList.add(
+                TaskItemResponse(
+                    id = it.id,
+                    gtin = it.gtin,
+                    productName = it.productName,
+                    totalKM = it.totalKM,
+                    soldKM = it.soldKm,
+                    waitingKm = it.waitingKM,
+                    conditionStatus = it.conditionStatus
+                )
+            )
+        }
+        taskItemListAdapter.differ.submitList(taskItemList)
+        taskItemListAdapter.notifyDataSetChanged()
+
+        if (taskItemList.isEmpty() && taskItemListAdapter.differ.currentList.isEmpty()) {
+            binding.llEmptyBackground.visible()
+        } else {
+            binding.llEmptyBackground.gone()
+        }
+
+    }
+
+    private val errorMessageFailedServerKMListObserver = Observer<String> {
         findNavController().popBackStack()
     }
 
-    private val taskMainStatusObserver = Observer<Boolean?>{
+    private val taskMainStatusObserver = Observer<Boolean?> {
 
         it?.let {
-            if (!it){
+            if (!it) {
                 val alertDialog = AlertDialog.Builder(requireContext())
                     .setTitle(getString(R.string.synchronize))
                     .setMessage(getString(R.string.ask_synchronize_failed_km))
                     .setCancelable(false)
                     .setNegativeButton(getString(R.string.no)) { _, _ -> findNavController().popBackStack() }
-                    .setPositiveButton(getString(R.string.yes)) { _, _ -> viewModel2.checkKMFromServer(kmList, navArg.taskInfo.id)}
+                    .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                        viewModel2.checkKMFromServer(
+                            kmList,
+                            navArg.taskInfo.id
+                        )
+                    }
                     .create()
 
                 alertDialog.show()
@@ -181,8 +281,8 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
 
     }
 
-    private val failedServerKMListObserver = Observer<List<String?>?>{
-        if (!it.isNullOrEmpty()){
+    private val failedServerKMListObserver = Observer<List<String?>?> {
+        if (!it.isNullOrEmpty()) {
             viewModel.taskStatus(navArg.taskInfo.id)
             kmList.clear()
             kmList.addAll(it)
@@ -309,7 +409,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
         taskItemList.clear()
         viewModel.taskItemList(navArg.taskInfo.id, page++, pageSize)
         it?.let {
-            it.rows?.map { km->
+            it.rows?.map { km ->
                 viewModel.insertKMDB(
                     KMModel(
                         km = km,
@@ -323,31 +423,40 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
 
     private val errorMessageObserver2 = Observer<String> {
         kmList.map {
-            viewModel.insertKMDB(
-                KMModel(
-                    km = it,
-                    taskId = navArg.taskInfo.id,
-                    kmStatusServer = KMStatusServer.FAILED.name
+            try {
+                viewModel.insertKMDB(
+                    KMModel(
+                        km = it!!,
+                        taskId = navArg.taskInfo.id,
+                        kmStatusServer = KMStatusServer.FAILED.name
+                    )
                 )
-            )
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
     @SuppressLint("NotifyDataSetChanged")
     private val taskItemListObserver = Observer<List<TaskItemResponse>?> {
         binding.swipeRefresh.isRefreshing = false
-        it?.let {
-            taskItemList.addAll(it)
-            taskItemListAdapter.differ.submitList(taskItemList)
-            taskItemListAdapter.notifyDataSetChanged()
+
+        it?.let { taskList ->
+
+            for (i in taskList.indices) {
+                viewModel.existGtin(taskList[i].gtin, navArg.taskInfo.id, taskList[i])
+                if (i == taskList.size - 1) {
+                    taskListLastItemListener?.invoke()
+                }
+
+            }
+
+
         }
 
-        if (taskItemList.isEmpty() && taskItemListAdapter.differ.currentList.isEmpty()) {
-            binding.llEmptyBackground.visible()
-        } else {
-            binding.llEmptyBackground.gone()
-        }
+
     }
+
 
     private val pageSizeObserver = Observer<Int> {
         maxPage = it
@@ -373,19 +482,20 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
         }
     }
 
+
     inner class ScanResultReceiver : BroadcastReceiver() {
+        @SuppressLint("NotifyDataSetChanged")
         override fun onReceive(context: Context, intent: Intent) {
             if (mScanner != null) {
                 try {
                     if (ScanConst.INTENT_USERMSG == intent.action) {
                         mScanner!!.aDecodeGetResult(mDecodeResult!!.recycle())
                         if (getString(R.string.read_fail) != mDecodeResult.toString() && start) {
-                            val list = listOf<String?>(mDecodeResult.toString())
-                            viewModel2.checkKMFromServer(list, navArg.taskInfo.id)
-                            kmList.clear()
-                            kmList.addAll(list as ArrayList<String>)
-                        }
 
+                            viewModel.existKM(mDecodeResult.toString())
+
+
+                        }
                     } else if (ScanConst.INTENT_EVENT == intent.action) {
                         val result =
                             intent.getBooleanExtra(ScanConst.EXTRA_EVENT_DECODE_RESULT, false)
@@ -404,17 +514,6 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
                         val modifier =
                             intent.getByteExtra(ScanConst.EXTRA_EVENT_DECODE_MODIFIER, 0.toByte())
                         val decodingTime = intent.getIntExtra(ScanConst.EXTRA_EVENT_DECODE_TIME, 0)
-                        Log.d("TTT", "1. result: $result")
-                        Log.d("TTT", "2. bytes length: $decodeBytesLength")
-                        Log.d("TTT", "3. bytes value: $decodeBytesValue")
-                        Log.d("TTT", "4. decoding length: $decodeLength")
-                        Log.d("TTT", "5. decoding value: $decodeValue")
-                        Log.d("TTT", "6. symbol name: $symbolName")
-                        Log.d("TTT", "7. symbol id: $symbolId")
-                        Log.d("TTT", "8. symbol type: $symbolType")
-                        Log.d("TTT", "9. decoding letter: $letter")
-                        Log.d("TTT", "10.decoding modifier: $modifier")
-                        Log.d("TTT", "11.decoding time: $decodingTime")
                     }
                 } catch (e: Exception) {
                     e.printStackTrace()
