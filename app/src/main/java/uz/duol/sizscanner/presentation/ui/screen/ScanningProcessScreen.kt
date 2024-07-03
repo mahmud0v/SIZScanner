@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -145,8 +146,10 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
             start = !start
             if (start) {
                 binding.beginBtn.text = getString(R.string.done)
+                binding.beginBtn.backgroundTintList = ContextCompat.getColorStateList(requireContext(),R.color.red_dark_color)
             } else {
-                binding.beginBtn.text = getString(R.string.start)
+                viewModel.taskStatus(navArg.taskInfo.id)
+//                binding.beginBtn.text = getString(R.string.start)
             }
         }
 
@@ -303,10 +306,10 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
         taskItemList.clear()
         viewModel.taskItemList(navArg.taskInfo.id, page++, pageSize)
         it?.let {
-            it.rows?.map {
+            it.rows?.map { km->
                 viewModel.insertKMDB(
                     KMModel(
-                        km = it,
+                        km = km,
                         taskId = navArg.taskInfo.id,
                         kmStatusServer = KMStatusServer.FAILED.name
                     )
@@ -373,7 +376,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen) {
                 try {
                     if (ScanConst.INTENT_USERMSG == intent.action) {
                         mScanner!!.aDecodeGetResult(mDecodeResult!!.recycle())
-                        if (getString(R.string.read_fail) != mDecodeResult.toString()) {
+                        if (getString(R.string.read_fail) != mDecodeResult.toString() && start) {
                             val list = listOf<String?>(mDecodeResult.toString())
                             viewModel2.checkKMFromServer(list, navArg.taskInfo.id)
                             kmList.clear()
