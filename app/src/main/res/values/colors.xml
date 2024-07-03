@@ -13,6 +13,7 @@
     <color name="stroke_dot_color">#8BE7E7E7</color>
     <color name="text_color">#262E3A</color>
     <color name="red_color">#E32F27</color>
+    <color name="red_dark_color">#a70000</color>
     <color name="green_color">#8BC34A</color>
     <color name="status_bar_color">#0E90F8</color>
     <color name="product_name_color">#305597</color>
