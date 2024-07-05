@@ -40,6 +40,7 @@ class TaskItemListViewModelImpl @Inject constructor(
     override val getAllGtinDBLiveData = MutableLiveData<List<GtinEntity>>()
     override val editWaitingKMLiveData = MutableLiveData<Int>()
     override val existKMLiveData = MutableLiveData<ExistsKMInfo>()
+    override val progressLoading2LiveData = MutableLiveData<Boolean>()
 
 
     private var maxPage: Int = 0
@@ -80,7 +81,10 @@ class TaskItemListViewModelImpl @Inject constructor(
     }
 
     override fun failedServerKMList(taskId: Int?) {
+        progressLoading2LiveData.value = false
+
         kmSaveDBUseCase.failedServerKMList(taskId).onEach {
+            progressLoading2LiveData.value = true
             it.onSuccess {
                 failedServerKMListLiveData.value = it
             }
@@ -88,6 +92,7 @@ class TaskItemListViewModelImpl @Inject constructor(
             it.onFailure {
                 errorMessageFailedServerKMListLiveData.value = it.message
             }
+
         }.launchIn(viewModelScope)
     }
 
@@ -107,9 +112,7 @@ class TaskItemListViewModelImpl @Inject constructor(
     override fun existGtin(gtin: String?, taskId: Int?, taskItem: TaskItemResponse?) {
         gtinUseCase.existsGtin(gtin, taskId).onEach {
             it.onSuccess {
-
                 taskItem?.existDB = it
-                Log.d("RRRR", "existGtin: ${taskItem?.gtin}, existDB: ${it}")
                 existGtinLiveData.value = taskItem
             }
 

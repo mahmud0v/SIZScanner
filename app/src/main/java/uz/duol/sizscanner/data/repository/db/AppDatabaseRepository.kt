@@ -27,4 +27,8 @@ interface AppDatabaseRepository {
     suspend fun editWaitingKM(waitingKM: Int?, gtin: String?, taskId: Int?):Int
 
     suspend fun existsKM(km:String?):Int
+
+    suspend fun kmChangeStatusScannedVerified(km: String?)
+
+    suspend fun countNotVerifiedTaskGtinKM(gtin: String?, taskId: Int?):Int?
 }

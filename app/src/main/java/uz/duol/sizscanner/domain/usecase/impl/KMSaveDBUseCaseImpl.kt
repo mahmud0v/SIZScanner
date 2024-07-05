@@ -2,9 +2,11 @@ package uz.duol.sizscanner.domain.usecase.impl
 
 import android.content.Context
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import uz.duol.sizscanner.R
@@ -27,9 +29,34 @@ class KMSaveDBUseCaseImpl @Inject constructor(
        }.flowOn(Dispatchers.IO)
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun failedServerKMList(taskId:Int?): Flow<Result<List<String?>?>> {
+        return channelFlow {
+            while (!isClosedForSend){
+                try {
+                    kotlinx.coroutines.delay(5000L)
+                    val response = appDatabaseRepository.failedServerKmList(taskId)
+                    send(Result.success(response))
+                }catch (e:Exception){
+                    close()
+                    return@channelFlow
+                }
+            }
+        }.flowOn(Dispatchers.IO)
+    }
+
+    override fun kmChangeStatusScannedVerified(km: String?): Flow<Result<Unit>> {
         return flow {
-            val response = appDatabaseRepository.failedServerKmList(taskId)
+            val response = appDatabaseRepository.kmChangeStatusScannedVerified(km)
+            emit(Result.success(Unit))
+        }.catch {
+            emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
+        }.flowOn(Dispatchers.IO)
+    }
+
+    override fun countNotVerifiedTaskGtinKM(gtin: String?, taskId: Int?): Flow<Result<Int?>> {
+        return flow {
+            val response = appDatabaseRepository.countNotVerifiedTaskGtinKM(gtin, taskId)
             emit(Result.success(response))
         }.catch {
             emit(Result.failure(Exception(context.getString(R.string.unknown_error))))

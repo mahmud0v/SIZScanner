@@ -10,7 +10,7 @@ import uz.duol.sizscanner.data.model.LimitTotalWaitingKM
 @Dao
 interface GtinDao {
 
-    @Query("SELECT  (total_km-sold_km) as difference_km, waiting_km FROM GTIN WHERE gtin=:gtin AND task_id =:taskId")
+    @Query("SELECT  total_km, (total_km-sold_km) as difference_km, waiting_km FROM GTIN WHERE gtin=:gtin AND task_id =:taskId")
     suspend fun getWaitingKMCount(gtin: String?, taskId: Int?): LimitTotalWaitingKM?
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -30,7 +30,6 @@ interface GtinDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM KMModel WHERE km =:km)")
     suspend fun existsKM(km:String?): Int
-
 
 
 

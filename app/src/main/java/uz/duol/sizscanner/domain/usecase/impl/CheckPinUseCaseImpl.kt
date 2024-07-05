@@ -1,11 +1,12 @@
 package uz.duol.sizscanner.domain.usecase.impl
 
 import android.content.Context
-import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import uz.duol.sizscanner.R
@@ -39,9 +40,7 @@ class CheckPinUseCaseImpl @Inject constructor(
                     else -> emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
                 }
             }
-            else{
-                emit(Result.failure(Exception(context.getString(R.string.error_internet))))
-            }
+
         }.catch {
             emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
         }.flowOn(Dispatchers.IO)
