@@ -15,7 +15,7 @@
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/clInfo"
             android:background="@color/white"
@@ -84,18 +84,27 @@
                 />
 
 
-            <View
-                android:id="@+id/line"
+            <Space
                 android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_marginTop="10dp"
-                android:background="#E8EEF4"
-                app:layout_constraintTop_toBottomOf="@id/taskStatus" />
-
+                android:layout_height="10dp"
+                app:layout_constraintTop_toBottomOf="@id/taskStatus"
+                />
 
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <ProgressBar
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:progressDrawable="@drawable/progress_horizontal"
+            android:id="@+id/horizontalProgress"
+            android:indeterminateTint="@color/status_bar_color"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:minHeight="10dp"
+            android:maxHeight="20dp"
+            app:layout_constraintTop_toBottomOf="@id/clInfo"
+            />
 
 
 

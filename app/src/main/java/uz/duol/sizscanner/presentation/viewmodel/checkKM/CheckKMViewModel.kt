@@ -13,12 +13,14 @@ interface CheckKMViewModel {
     val allTaskGtinKMErrorLiveData:LiveData<String>
     val allTaskGtinKMLiveData2:LiveData<Int?>
     val allTaskGtinKMErrorLiveData2:LiveData<String>
-
-
+    val kmChangeStatusScannedVerifiedLiveData:LiveData<Unit>
+    val countNotVerifiedTaskGtinKMLiveData:LiveData<WaitingGtinInfo?>
 
 
     fun checkKMFromServer(kmList:List<String?>, transactionId:Int?)
     fun getWaitingKMCount(gtin:String?, taskId: Int?)
     fun insertGtin(gtinEntity: GtinEntity)
     fun allTaskGtinKM2(gtin: String?, taskId: Int?)
+    fun kmChangeStatusScannedVerified(km:String?)
+    fun countNotVerifiedTaskGtinKM(waitingGtinInfo:WaitingGtinInfo? )
 }

@@ -22,6 +22,7 @@ interface TaskItemListViewModel {
     val getAllGtinDBLiveData:LiveData<List<GtinEntity>>
     val editWaitingKMLiveData:LiveData<Int>
     val existKMLiveData:LiveData<ExistsKMInfo>
+    val progressLoading2LiveData:LiveData<Boolean>
 
     fun taskItemList(taskItemId:Int?, page:Int, size: Int)
     fun insertKMDB(kmModel: KMModel)

@@ -5,6 +5,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import uz.duol.sizscanner.R
@@ -25,24 +26,35 @@ class CheckKMUsaCaseImpl @Inject constructor(
 
     override fun checkKMFromServer(kmList: List<String?>, transactionId:Int?): Flow<Result<CheckKMResponse?>> {
         return flow {
-            if (isConnected()) {
-                val response = appRepository.checkKMFromServer(kmList, transactionId)
-                when (response.body()?.status) {
-                    in 200..209 -> {
-                        response.body()?.newToken?.let {
-                            sharedPreference.token = it
+                if (isConnected()) {
+                    val response = appRepository.checkKMFromServer(kmList, transactionId)
+                    when (response.body()?.status) {
+                        in 200..209 -> {
+                            response.body()?.newToken?.let {
+                                sharedPreference.token = it
+                            }
+                            emit(Result.success(response.body()!!.obj))
                         }
-                        emit(Result.success(response.body()!!.obj))
-                    }
 
-                    401 -> emit(Result.failure(Exception(context.getString(R.string.unauthorised))))
-                    404 -> emit(Result.failure(Exception(context.getString(R.string.not_found))))
-                    in 500..599 -> emit(Result.failure(Exception(context.getString(R.string.server_error))))
-                    else -> emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
+                        401 -> {
+                            emit(Result.failure(Exception(context.getString(R.string.unauthorised))))
+                        }
+                        404 -> {
+                            emit(Result.failure(Exception(context.getString(R.string.not_found))))
+                        }
+                        in 500..599 -> {
+                            emit(Result.failure(Exception(context.getString(R.string.server_error))))
+
+                        }
+                        else -> {
+                            emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
+
+                        }
+                    }
+                } else {
+                    emit(Result.failure(Exception(context.getString(R.string.error_internet))))
+
                 }
-            } else {
-                emit(Result.failure(Exception(context.getString(R.string.error_internet))))
-            }
 
         }.catch {
             emit(Result.failure(Exception(context.getString(R.string.unknown_error))))

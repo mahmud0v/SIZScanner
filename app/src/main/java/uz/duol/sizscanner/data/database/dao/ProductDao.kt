@@ -10,7 +10,7 @@ import uz.duol.sizscanner.data.database.entity.KMModel
 @Dao
 interface ProductDao {
 
-   @Query("SELECT km FROM KMModel WHERE km_status_server = 'FAILED' AND task_id =:taskId")
+   @Query("SELECT km FROM KMModel WHERE km_status_server = 'SCANNED_NOT_VERIFIED' AND task_id =:taskId")
    suspend fun failedServerKMList(taskId: Int?): List<String?>
 
    @Insert(onConflict = OnConflictStrategy.REPLACE)
@@ -21,5 +21,14 @@ interface ProductDao {
 
    @Query("SELECT Count(*) FROM KMModel WHERE gtin=:gtin AND task_id=:taskId")
    suspend fun allTaskGtinKM(taskId: Int?, gtin: String?):Int?
+
+   @Query("UPDATE KMModel SET km_status_server='SCANNED_VERIFIED' where km=:km")
+   suspend fun kmChangeStatusScannedVerified(km:String?)
+
+   @Query("SELECT Count(*) FROM KMModel WHERE task_id=:taskId AND gtin=:gtin AND km_status_server = 'SCANNED_VERIFIED'")
+   suspend fun countNotVerifiedTaskGtinKM(gtin: String?, taskId: Int?):Int?
+
+
+
 
 }

@@ -9,4 +9,8 @@ interface KMSaveDBUseCase {
 
     fun failedServerKMList(taskId:Int?): Flow<Result<List<String?>?>>
 
+    fun kmChangeStatusScannedVerified(km:String?): Flow<Result<Unit>>
+
+    fun countNotVerifiedTaskGtinKM(gtin: String?, taskId: Int?): Flow<Result<Int?>>
+
 }

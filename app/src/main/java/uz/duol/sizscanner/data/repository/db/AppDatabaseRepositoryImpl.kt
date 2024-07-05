@@ -56,4 +56,12 @@ class AppDatabaseRepositoryImpl @Inject constructor(
     override suspend fun existsKM(km: String?): Int {
         return gtinDao.existsKM(km)
     }
+
+    override suspend fun kmChangeStatusScannedVerified(km: String?) {
+        return productDao.kmChangeStatusScannedVerified(km)
+    }
+
+    override suspend fun countNotVerifiedTaskGtinKM(gtin: String?, taskId: Int?): Int? {
+        return productDao.countNotVerifiedTaskGtinKM(gtin, taskId)
+    }
 }
