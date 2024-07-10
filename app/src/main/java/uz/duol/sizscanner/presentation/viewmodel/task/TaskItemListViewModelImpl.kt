@@ -1,6 +1,5 @@
 package uz.duol.sizscanner.presentation.viewmodel.task
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -35,6 +34,7 @@ class TaskItemListViewModelImpl @Inject constructor(
     override val failedServerKMListLiveData = MutableLiveData<List<String?>?>()
     override val errorMessageFailedServerKMListLiveData = MutableLiveData<String>()
     override val taskMainStatusLiveData = MutableLiveData<Boolean?>()
+    override val errorTaskMainStatusLiveData = MutableLiveData<String>()
     override val existGtinLiveData = MutableLiveData<TaskItemResponse?>()
     override val editGtinTotalSoldKMLiveData = MutableLiveData<Unit>()
     override val getAllGtinDBLiveData = MutableLiveData<List<GtinEntity>>()
@@ -103,7 +103,7 @@ class TaskItemListViewModelImpl @Inject constructor(
             }
 
             it.onFailure {
-                errorMessageLiveData.value = it.message
+                errorTaskMainStatusLiveData.value = it.message
             }
 
         }.launchIn(viewModelScope)

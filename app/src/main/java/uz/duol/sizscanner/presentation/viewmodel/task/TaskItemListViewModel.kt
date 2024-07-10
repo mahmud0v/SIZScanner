@@ -17,6 +17,7 @@ interface TaskItemListViewModel {
     val failedServerKMListLiveData:LiveData<List<String?>?>
     val errorMessageFailedServerKMListLiveData:LiveData<String>
     val taskMainStatusLiveData : LiveData<Boolean?>
+    val errorTaskMainStatusLiveData:LiveData<String>
     val existGtinLiveData:LiveData<TaskItemResponse?>
     val editGtinTotalSoldKMLiveData:LiveData<Unit>
     val getAllGtinDBLiveData:LiveData<List<GtinEntity>>

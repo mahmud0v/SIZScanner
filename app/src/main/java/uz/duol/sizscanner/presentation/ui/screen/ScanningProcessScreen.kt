@@ -11,6 +11,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,7 +24,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
-import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import device.common.DecodeResult
 import device.common.DecodeStateCallback
@@ -144,7 +144,17 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         }
 
         taskListLastItemListener = {
-            viewModel.getAllGtinDB(navArg.taskInfo.id)
+            val timer = object : CountDownTimer(2000L, 1000L){
+                override fun onTick(p0: Long) {
+
+                }
+
+                override fun onFinish() {
+                    viewModel.getAllGtinDB(navArg.taskInfo.id)
+                }
+
+            }.start()
+
         }
 
 
@@ -174,6 +184,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         viewModel.getAllGtinDBLiveData.observe(viewLifecycleOwner, getAllGtinDBObserver)
         viewModel.addWaitingKMSaveDB.observe(viewLifecycleOwner, addWaitingKMSaveDBObserver)
         viewModel.existKMLiveData.observe(viewLifecycleOwner, existKMLiveDataObserver)
+        viewModel.errorTaskMainStatusLiveData.observe(viewLifecycleOwner, errorTaskMainStatusObserver)
 
 
         viewModel2.getWaitingKMCountLiveData.observe(
@@ -185,6 +196,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
             })
 
         viewModel.existGtinLiveData.observe(viewLifecycleOwner, Observer {
+            Log.d("MMMM", "gtin update or insert: ")
             if (it?.existDB == 1) {
                 viewModel.editGtinTotalSoldKM(it.id, it.totalKM, it.soldKM)
             } else {
@@ -232,61 +244,41 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
     }
 
+    private val errorTaskMainStatusObserver = Observer<String>{
+        findNavController().popBackStack()
+    }
+
     private val editWaitingKMObserver = Observer<Int> {
         viewModel.getAllGtinDB(navArg.taskInfo.id)
     }
 
     private val countNotVerifiedTaskGtinKMLiveData = Observer<WaitingGtinInfo?>{
-//        if (it?.waitingGtinCount !=null && it?.kmModelCountKM !=null){
-//            if (it.waitingGtinCount < it.kmModelCountKM!!){
-//                val dbKm = it.waitingGtinCount + 1
-//                viewModel.editWaitingKM(
-//                    waitingKM = dbKm,
-//                    it.gtin,
-//                    it.taskId
-//                )
-//            } else {
-//                snackBar(getString(R.string.limit_scanner_km, it.gtin))
-//            }
-//        } else {
-//            snackBar(getString(R.string.unknown_error))
-//        }
-
-        if (it?.waitingGtinCount != null && it.differenceKM != null) {
-
-            if (it.differenceKM > it.waitingGtinCount) {
+        if (it?.waitingGtinCount !=null && it.kmModelCountKM !=null){
+            if (it.differenceKM!=0 && it.waitingGtinCount<it.totalKM!!){
                 val dbKm = it.waitingGtinCount + 1
                 viewModel.editWaitingKM(
                     waitingKM = dbKm,
                     it.gtin,
                     it.taskId
                 )
-            } else if (it?.totalKM!=null && it?.kmModelCountKM !=null){
-                if (it.totalKM> it?.kmModelCountKM!!){
-                    val dbKm = it.waitingGtinCount + 1
-                    viewModel.editWaitingKM(
-                        waitingKM = dbKm,
-                        it.gtin,
-                        it.taskId
-                    )
-                } else {
-                    snackBar(getString(R.string.limit_scanner_km, it.gtin))
-                }
             } else {
                 snackBar(getString(R.string.limit_scanner_km, it.gtin))
             }
-
         } else {
             snackBar(getString(R.string.unknown_error))
         }
+
     }
 
     private val successCheckKMLiveDataObserver = Observer<CheckKMResponse?> {
         it?.rows?.map { kmInfo ->
             kmInfo?.kmsSold?.let { kmList ->
                 for (i in kmList.indices){
+                    Log.d("RRRR", "kmList indices: $i")
+
                     viewModel2.kmChangeStatusScannedVerified(kmList[i])
                     if (i == kmList.lastIndex) {
+                        Log.d("RRRR", "kmList.lastIndex: ${kmList.lastIndex}")
                         page = 0
                         taskItemList.clear()
                         viewModel.taskItemList(navArg.taskInfo.id, page++, pageSize)
@@ -345,6 +337,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                 )
             )
         }
+        Log.d("MMMM", "list: $it")
         taskItemListAdapter.differ.submitList(taskItemList)
         taskItemListAdapter.notifyDataSetChanged()
 
@@ -361,40 +354,17 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
     }
 
     private val taskMainStatusObserver = Observer<Boolean?> {
+        findNavController().popBackStack()
 
-        it?.let {
-            if (!it) {
-                val alertDialog = AlertDialog.Builder(requireContext())
-                    .setTitle(getString(R.string.synchronize))
-                    .setMessage(getString(R.string.ask_synchronize_failed_km))
-                    .setCancelable(false)
-                    .setNegativeButton(getString(R.string.no)) { _, _ -> findNavController().popBackStack() }
-                    .setPositiveButton(getString(R.string.yes)) { _, _ ->
-                        viewModel2.checkKMFromServer(
-                            kmList,
-                            navArg.taskInfo.id
-                        )
-                    }
-                    .create()
-
-                alertDialog.show()
-            } else {
-                findNavController().popBackStack()
-            }
-        }
 
     }
 
     private val failedServerKMListObserver = Observer<List<String?>?> {
+        Log.d("RRRR", "synchrone ")
         viewModel2.checkKMFromServer(
             it!!,
             navArg.taskInfo.id
         )
-//        if (!it.isNullOrEmpty()) {
-//            viewModel.taskStatus(navArg.taskInfo.id)
-//            kmList.clear()
-//            kmList.addAll(it)
-//        }
     }
 
     private val taskStatusObserver = Observer<String?> {
@@ -534,22 +504,14 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
     @SuppressLint("NotifyDataSetChanged")
     private val taskItemListObserver = Observer<List<TaskItemResponse>?> {
         binding.swipeRefresh.isRefreshing = false
-
-
         it?.let { taskList ->
-
             for (i in taskList.indices) {
                 viewModel.existGtin(taskList[i].gtin, navArg.taskInfo.id, taskList[i])
                 if (i == taskList.size - 1) {
                     taskListLastItemListener?.invoke()
                 }
-
             }
-
-
         }
-
-
     }
 
 
