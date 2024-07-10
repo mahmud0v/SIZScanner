@@ -44,9 +44,9 @@ class NetworkModule {
     fun getOkHttp(
         @ApplicationContext context: Context,
         appSharedPreference: AppSharedPreference
-    ) = OkHttpClient().newBuilder().readTimeout(1, TimeUnit.MINUTES)
-        .connectTimeout(1, TimeUnit.MINUTES).callTimeout(1, TimeUnit.MINUTES)
-        .writeTimeout(1, TimeUnit.MINUTES)
+    ) = OkHttpClient().newBuilder().readTimeout(15, TimeUnit.SECONDS)
+        .connectTimeout(15, TimeUnit.SECONDS).callTimeout(15, TimeUnit.SECONDS)
+        .writeTimeout(15, TimeUnit.SECONDS)
         .addInterceptor(tokenInterceptor(appSharedPreference))
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         .addInterceptor(ChuckerInterceptor.Builder(context).build())
