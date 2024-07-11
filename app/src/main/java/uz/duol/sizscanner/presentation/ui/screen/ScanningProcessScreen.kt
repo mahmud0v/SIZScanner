@@ -146,9 +146,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
         taskListLastItemListener = {
             val timer = object : CountDownTimer(1000L, 1000L){
-                override fun onTick(p0: Long) {
-
-                }
+                override fun onTick(p0: Long) {}
 
                 override fun onFinish() {
                     viewModel.getAllGtinDB(navArg.taskInfo.id)
