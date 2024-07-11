@@ -326,7 +326,6 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
     private val changeWaitingKMCountObserver = Observer<ChangeWaitingGtinCountInfo?>{
         it?.waitingKM?.let {waitingKM ->
             val resultKMCount = waitingKM- it.countSuccessKM!!
-            Log.d("BBBB", "resultKMCount: $resultKMCount  waitingKM: ${waitingKM} countSuccessKM: ${it.countSuccessKM}")
             viewModel.editWaitingKM(resultKMCount, it.gtin, it.taskId)
         }
 
