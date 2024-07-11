@@ -1,5 +1,6 @@
 package uz.duol.sizscanner.presentation.viewmodel.task
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -70,13 +71,15 @@ class TaskItemListViewModelImpl @Inject constructor(
 
     override fun insertKMDB(kmModel: KMModel) {
         kmSaveDBUseCase.insertKM(kmModel).onEach {
-            it.onFailure {
-                errorMessageLiveData.value = it.message
-            }
 
             it.onSuccess {
                 addWaitingKMSaveDB.value = InsertKMInfo(it, kmModel.km)
             }
+
+            it.onFailure {
+                errorMessageLiveData.value = it.message
+            }
+
         }.launchIn(viewModelScope)
     }
 

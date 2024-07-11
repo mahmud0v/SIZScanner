@@ -63,4 +63,13 @@ class KMSaveDBUseCaseImpl @Inject constructor(
         }.flowOn(Dispatchers.IO)
     }
 
+    override fun deleteKM(km: String?) : Flow<Result<Unit>>{
+        return flow {
+            val response = appDatabaseRepository.deleteKM(km)
+            emit(Result.success(Unit))
+        }.catch {
+            emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
+        }.flowOn(Dispatchers.IO)
+    }
+
 }

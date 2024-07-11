@@ -1,6 +1,6 @@
 <resources>
 
-    <string name="app_name">SIZ Scanner</string>
+    <string name="app_name">Акфа ТЗД</string>
     <string name="bar_type">Barcode Type</string>
     <string name="scan_result">Scanned Result showing on check status </string>
     <string name="scan_on">Scan On</string>
@@ -12,7 +12,6 @@
     <string name="property_enable">Enable UPC-A "Send Check Character"</string>
     <string name="property_disable">Disable UPC-A "Send Check Character"</string>
     <string name="msg_wait">Waiting&#8230;</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="user">Пользователь</string>
     <string name="user_1">Axmadaliev Doston</string>
@@ -55,10 +54,4 @@
     <string name="closed">Закрыто</string>
     <string name="limit_scanner_km">%s отсканировал достаточное количество километров для продукта</string>
 
-
-    <array name="tab_list">
-        <item>@string/no_scanned</item>
-        <item>@string/failed_scanned</item>
-        <item>@string/success_scanned</item>
-    </array>
 </resources>

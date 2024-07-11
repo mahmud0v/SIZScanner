@@ -21,6 +21,7 @@ import uz.duol.sizscanner.data.remote.response.CheckPinResponse
 import uz.duol.sizscanner.databinding.PinCodeScreenBinding
 import uz.duol.sizscanner.presentation.viewmodel.pin.CheckPinViewModel
 import uz.duol.sizscanner.presentation.viewmodel.pin.CheckPinViewModelImpl
+import uz.duol.sizscanner.utils.backPressDispatcher
 import uz.duol.sizscanner.utils.disable
 import uz.duol.sizscanner.utils.enable
 import uz.duol.sizscanner.utils.gone
@@ -39,17 +40,7 @@ class PINCodeScreen : Fragment(R.layout.pin_code_screen) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         clickNumber()
         clickEraseBtn()
-
-
-
-//        FirebaseMessaging.getInstance().token.addOnCompleteListener {
-//            if (!it.isSuccessful){
-//                Log.d("TTT", "Fetching FCM registration token failed", it.getException());
-//            }
-//
-//            val token = it.result
-//            Log.d("TTT", "token: $token")
-//        }
+        backPressDispatcher()
 
         viewModel.checkPinLiveData.observe(viewLifecycleOwner, checkPinObserver)
         viewModel.progressLoadingLiveData.observe(viewLifecycleOwner, progressObserver)
@@ -107,7 +98,6 @@ class PINCodeScreen : Fragment(R.layout.pin_code_screen) {
             numberText.setOnClickListener {
                 dotFill()
                 pinText += numberText.text.toString()
-                Log.d("TTT", "pin: $pinText")
                 checkAdd()
             }
         }

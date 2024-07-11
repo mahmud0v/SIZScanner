@@ -19,14 +19,19 @@ interface ProductDao {
    @Update
    suspend fun updateKM(updateKMModel: KMModel)
 
-   @Query("SELECT Count(*) FROM KMModel WHERE gtin=:gtin AND task_id=:taskId")
+   @Query("SELECT Count(*) FROM KMModel WHERE gtin=:gtin AND task_id=:taskId AND km_status_server = 'SCANNED_NOT_VERIFIED'")
    suspend fun allTaskGtinKM(taskId: Int?, gtin: String?):Int?
 
    @Query("UPDATE KMModel SET km_status_server='SCANNED_VERIFIED' where km=:km")
    suspend fun kmChangeStatusScannedVerified(km:String?)
 
+   @Query("DELETE FROM KMModel WHERE km=:km")
+   suspend fun deleteKM(km:String?)
+
    @Query("SELECT Count(*) FROM KMModel WHERE task_id=:taskId AND gtin=:gtin AND km_status_server = 'SCANNED_VERIFIED'")
    suspend fun countNotVerifiedTaskGtinKM(gtin: String?, taskId: Int?):Int?
+
+
 
 
 

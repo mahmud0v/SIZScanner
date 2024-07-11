@@ -13,4 +13,6 @@ interface KMSaveDBUseCase {
 
     fun countNotVerifiedTaskGtinKM(gtin: String?, taskId: Int?): Flow<Result<Int?>>
 
+    fun deleteKM(km:String?): Flow<Result<Unit>>
+
 }

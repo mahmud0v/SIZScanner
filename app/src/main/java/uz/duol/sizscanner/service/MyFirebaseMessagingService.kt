@@ -9,17 +9,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
 
-        Log.d("PPP", "onMessageReceived: ${message.data}")
-
-        message.notification?.let {
-            Log.d("PPP", "message body: ${it.body}")
-        }
+        message.notification?.let {}
     }
 
     override fun onNewToken(token: String) {
         super.onNewToken(token)
 
-        Log.d("TTT", "onNewToken: $token")
     }
 
 
