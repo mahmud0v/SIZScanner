@@ -145,7 +145,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         }
 
         taskListLastItemListener = {
-            val timer = object : CountDownTimer(2000L, 1000L){
+            val timer = object : CountDownTimer(1000L, 1000L){
                 override fun onTick(p0: Long) {
 
                 }
