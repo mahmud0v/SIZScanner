@@ -31,4 +31,6 @@ interface AppDatabaseRepository {
     suspend fun kmChangeStatusScannedVerified(km: String?)
 
     suspend fun countNotVerifiedTaskGtinKM(gtin: String?, taskId: Int?):Int?
+
+    suspend fun deleteKM(km:String?)
 }

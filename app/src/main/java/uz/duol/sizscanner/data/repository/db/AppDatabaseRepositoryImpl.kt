@@ -64,4 +64,8 @@ class AppDatabaseRepositoryImpl @Inject constructor(
     override suspend fun countNotVerifiedTaskGtinKM(gtin: String?, taskId: Int?): Int? {
         return productDao.countNotVerifiedTaskGtinKM(gtin, taskId)
     }
+
+    override suspend fun deleteKM(km: String?) {
+        return productDao.deleteKM(km)
+    }
 }

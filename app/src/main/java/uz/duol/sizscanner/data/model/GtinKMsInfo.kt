@@ -6,5 +6,7 @@ data class WaitingGtinInfo(
     val differenceKM:Int? = null,
     val gtin:String? = null,
     val taskId:Int? = null,
-    var kmModelCountKM:Int? = null
+    var kmModelCountKM:Int? = null,
+    val insertKM:String? = null,
+    val gtinKMCountNotVerified:Int? = null
 )

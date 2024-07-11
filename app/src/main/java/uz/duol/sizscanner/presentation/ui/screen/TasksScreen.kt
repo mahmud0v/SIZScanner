@@ -44,7 +44,9 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
             findNavController().navigate(TasksScreenDirections.actionTasksScreenToTaskItemsScreen(it))
         }
 
-        Log.d("TTT", "onViewCreated: Task Screen")
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
 
 
         page = 0
@@ -76,7 +78,6 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
         binding.swipeRefresh.isRefreshing = false
         it?.let {
             taskList.addAll(it)
-            Log.d("DDD", "task list: $taskList")
             taskAdapter.differ.submitList(taskList)
             taskAdapter.notifyDataSetChanged()
         }
@@ -91,6 +92,9 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
     @SuppressLint("NotifyDataSetChanged")
     private val errorMessageObserver = Observer<String> {
         binding.swipeRefresh.isRefreshing = false
+        if (it == getString(R.string.unauthorised)) {
+            findNavController().navigate(R.id.PINCodeScreen)
+        }
         snackBar(it)
         if (taskList.isEmpty()) {
             taskAdapter.notifyDataSetChanged()

@@ -31,14 +31,25 @@ class HomeScreen : Fragment(R.layout.home_screen){
             findNavController().navigate(HomeScreenDirections.actionHomeScreenToTasksScreen())
         }
 
+        binding.toolbar.setNavigationOnClickListener {
+            findNavController().popBackStack()
+        }
+
         viewModel.newTaskList(0,10)
 
         viewModel.totalSizeLiveData.observe(viewLifecycleOwner, totalSizeObserver)
+        viewModel.errorMessageLiveData.observe(viewLifecycleOwner, errorMessageObserver)
 
     }
 
     private val totalSizeObserver = Observer<Int>{
         binding.taskSize.text = it.toString()
+    }
+
+    private val errorMessageObserver = Observer<String>{
+        if (it == getString(R.string.unauthorised)){
+            findNavController().navigate(R.id.PINCodeScreen)
+        }
     }
 
 }
