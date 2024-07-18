@@ -6,5 +6,6 @@ data class ApiResponse<T>(
     val status: Int? = null,
     val obj: T? = null,
     val hasNewToken: Boolean? = null,
-    val newToken: String? = null
+    val accessToken: String? = null,
+    val refreshToken: String? = null
 )

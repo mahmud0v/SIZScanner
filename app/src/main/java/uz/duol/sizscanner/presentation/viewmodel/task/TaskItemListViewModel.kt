@@ -14,8 +14,8 @@ interface TaskItemListViewModel {
     val pageSizeLiveData: LiveData<Int>
     val addWaitingKMSaveDB: LiveData<InsertKMInfo>
     val taskStatusLiveData: LiveData<String?>
-    val failedServerKMListLiveData:LiveData<List<String?>?>
-    val errorMessageFailedServerKMListLiveData:LiveData<String>
+    val scannedNotVerifiedKMListLiveData:LiveData<List<String?>?>
+    val errorScannedNotVerifiedKMListLiveData:LiveData<String>
     val taskMainStatusLiveData : LiveData<Boolean?>
     val errorTaskMainStatusLiveData:LiveData<String>
     val existGtinLiveData:LiveData<TaskItemResponse?>
@@ -23,12 +23,12 @@ interface TaskItemListViewModel {
     val getAllGtinDBLiveData:LiveData<List<GtinEntity>>
     val editWaitingKMLiveData:LiveData<Int>
     val existKMLiveData:LiveData<ExistsKMInfo>
-    val progressLoading2LiveData:LiveData<Boolean>
+    val horizontalProgressLiveData:LiveData<Boolean>
 
     fun taskItemList(taskItemId:Int?, page:Int, size: Int)
     fun insertKMDB(kmModel: KMModel)
-    fun failedServerKMList(taskId:Int?)
-    fun taskStatus(transactionId:Int?)
+    fun scannedNotVerifiedKMList(taskId:Int?)
+    fun checkTaskStatus(transactionId:Int?)
     fun existGtin(gtin:String?, taskId: Int?, taskItem:TaskItemResponse?)
     fun editGtinTotalSoldKM(id:Int?, totalKM:Int?, soldKM:Int?)
     fun getAllGtinDB(taskId: Int?)

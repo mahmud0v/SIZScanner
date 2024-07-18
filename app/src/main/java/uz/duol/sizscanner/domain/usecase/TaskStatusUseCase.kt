@@ -4,6 +4,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface TaskStatusUseCase {
 
-    fun taskStatus(transactionId:Int?): Flow<Result<Boolean?>>
+    fun checkTaskStatus(transactionId:Int?): Flow<Result<Boolean?>>
 
 }

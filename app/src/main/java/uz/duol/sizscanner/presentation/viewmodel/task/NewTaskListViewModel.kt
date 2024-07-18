@@ -10,8 +10,10 @@ interface NewTaskListViewModel {
     val progressLoadingLiveData: LiveData<Boolean>
     val pageSizeLiveData: LiveData<Int>
     val totalSizeLiveData:LiveData<Int>
+    val logoutLiveData:LiveData<Unit>
 
 
     fun newTaskList(page:Int, size:Int)
+    fun logout()
 
 }

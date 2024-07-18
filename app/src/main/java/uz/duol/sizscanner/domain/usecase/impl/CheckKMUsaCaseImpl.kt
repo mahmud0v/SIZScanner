@@ -28,11 +28,8 @@ class CheckKMUsaCaseImpl @Inject constructor(
         return flow {
                 if (isConnected()) {
                     val response = appRepository.checkKMFromServer(kmList, transactionId)
-                    when (response.body()?.status) {
+                    when (response.code()) {
                         in 200..209 -> {
-                            response.body()?.newToken?.let {
-                                sharedPreference.token = it
-                            }
                             emit(Result.success(response.body()!!.obj))
                         }
                         401 -> emit(Result.failure(Exception(context.getString(R.string.unauthorised))))

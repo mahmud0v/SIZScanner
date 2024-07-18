@@ -19,5 +19,6 @@
     <color name="product_name_color">#305597</color>
     <color name="process_status_text">#D3A245</color>
     <color name="closed_status_text">#1BA8E5</color>
+    <color name="new_status_text">#089487</color>
 
 </resources>

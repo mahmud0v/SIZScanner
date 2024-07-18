@@ -1,7 +1,5 @@
 package uz.duol.sizscanner.presentation.viewmodel.task
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,8 +30,8 @@ class TaskItemListViewModelImpl @Inject constructor(
     override val pageSizeLiveData = MutableLiveData<Int>()
     override val addWaitingKMSaveDB = MutableLiveData<InsertKMInfo>()
     override val taskStatusLiveData = MutableLiveData<String?>()
-    override val failedServerKMListLiveData = MutableLiveData<List<String?>?>()
-    override val errorMessageFailedServerKMListLiveData = MutableLiveData<String>()
+    override val scannedNotVerifiedKMListLiveData = MutableLiveData<List<String?>?>()
+    override val errorScannedNotVerifiedKMListLiveData = MutableLiveData<String>()
     override val taskMainStatusLiveData = MutableLiveData<Boolean?>()
     override val errorTaskMainStatusLiveData = MutableLiveData<String>()
     override val existGtinLiveData = MutableLiveData<TaskItemResponse?>()
@@ -41,7 +39,7 @@ class TaskItemListViewModelImpl @Inject constructor(
     override val getAllGtinDBLiveData = MutableLiveData<List<GtinEntity>>()
     override val editWaitingKMLiveData = MutableLiveData<Int>()
     override val existKMLiveData = MutableLiveData<ExistsKMInfo>()
-    override val progressLoading2LiveData = MutableLiveData<Boolean>()
+    override val horizontalProgressLiveData = MutableLiveData<Boolean>()
 
 
     private var maxPage: Int = 0
@@ -83,24 +81,24 @@ class TaskItemListViewModelImpl @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    override fun failedServerKMList(taskId: Int?) {
-        progressLoading2LiveData.value = false
+    override fun scannedNotVerifiedKMList(taskId: Int?) {
+        horizontalProgressLiveData.value = false
 
-        kmSaveDBUseCase.failedServerKMList(taskId).onEach {
-            progressLoading2LiveData.value = true
+        kmSaveDBUseCase.scannedNotVerifiedKMList(taskId).onEach {
+            horizontalProgressLiveData.value = true
             it.onSuccess {
-                failedServerKMListLiveData.value = it
+                scannedNotVerifiedKMListLiveData.value = it
             }
 
             it.onFailure {
-                errorMessageFailedServerKMListLiveData.value = it.message
+                errorScannedNotVerifiedKMListLiveData.value = it.message
             }
 
         }.launchIn(viewModelScope)
     }
 
-    override fun taskStatus(transactionId: Int?) {
-        taskStatusUseCase.taskStatus(transactionId).onEach {
+    override fun checkTaskStatus(transactionId: Int?) {
+        taskStatusUseCase.checkTaskStatus(transactionId).onEach {
             it.onSuccess {
                 taskMainStatusLiveData.value = it
             }

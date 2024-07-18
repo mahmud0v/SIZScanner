@@ -11,7 +11,7 @@ import uz.duol.sizscanner.data.remote.response.TaskResponse
 
 interface AppRepository {
 
-    suspend fun checkPin(pin:String) : Response<ApiResponse<CheckPinResponse>>
+    suspend fun checkPin(pin:String, deviceId:String?) : Response<ApiResponse<CheckPinResponse>>
 
     suspend fun newTaskList(page:Int, size:Int) : Response<ApiResponse<PageList<List<TaskResponse>>>>
 
@@ -19,6 +19,8 @@ interface AppRepository {
 
     suspend fun checkKMFromServer(kmList:List<String?>, transactionId:Int?): Response<ApiResponse<CheckKMResponse>>
 
-    suspend fun taskState(transactionId:Int?): Response<ApiResponse<Boolean>>
+    suspend fun checkTaskStatus(transactionId:Int?): Response<ApiResponse<Boolean>>
+
+    suspend fun logout(): Response<ApiResponse<Unit>>
 
 }

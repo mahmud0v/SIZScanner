@@ -21,8 +21,8 @@ class AppDatabaseRepositoryImpl @Inject constructor(
         productDao.updateKM(kmModel)
     }
 
-    override suspend fun failedServerKmList(taskId: Int?): List<String?> {
-        return productDao.failedServerKMList(taskId)
+    override suspend fun scannedNotVerifiedKmList(taskId: Int?): List<String?> {
+        return productDao.scannedNotVerifiedKMList(taskId)
     }
 
     override suspend fun getWaitingKMCount(gtin: String?, taskId: Int?): LimitTotalWaitingKM? {

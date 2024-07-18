@@ -11,7 +11,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -171,11 +170,11 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         viewModel.pageSizeLiveData.observe(viewLifecycleOwner, pageSizeObserver)
         viewModel.errorMessageLiveData.observe(viewLifecycleOwner, errorMessageObserver)
         viewModel.progressLoadingLiveData.observe(viewLifecycleOwner, progressObserver)
-        viewModel.progressLoading2LiveData.observe(viewLifecycleOwner, progressObserver2)
+        viewModel.horizontalProgressLiveData.observe(viewLifecycleOwner, horizontalProgressObserver)
         viewModel.taskStatusLiveData.observe(viewLifecycleOwner, taskStatusObserver)
-        viewModel.failedServerKMListLiveData.observe(viewLifecycleOwner, failedServerKMListObserver)
+        viewModel.scannedNotVerifiedKMListLiveData.observe(viewLifecycleOwner, scannedNotVerifiedKMListObserver)
         viewModel.taskMainStatusLiveData.observe(viewLifecycleOwner, taskMainStatusObserver)
-        viewModel.errorMessageFailedServerKMListLiveData.observe(
+        viewModel.errorScannedNotVerifiedKMListLiveData.observe(
             viewLifecycleOwner,
             errorMessageFailedServerKMListObserver
         )
@@ -226,11 +225,10 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                 binding.beginBtn.text = getString(R.string.done)
                 binding.beginBtn.backgroundTintList =
                     ContextCompat.getColorStateList(requireContext(), R.color.red_dark_color)
-                // dev commit
                 binding.beginBtn.backgroundTintList =
                     ContextCompat.getColorStateList(requireContext(), R.color.red_dark_color)
             } else {
-                viewModel.taskStatus(navArg.taskInfo.id)
+                viewModel.checkTaskStatus(navArg.taskInfo.id)
             }
         }
 
@@ -324,7 +322,6 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
     private val changeWaitingKMCountObserver = Observer<ChangeWaitingGtinCountInfo?>{
         it?.waitingKM?.let {waitingKM ->
             val resultKMCount = waitingKM- it.countSuccessKM!!
-            Log.d("BBBB", "resultKMCount: $resultKMCount  waitingKM: ${waitingKM} countSuccessKM: ${it.countSuccessKM}")
             viewModel.editWaitingKM(resultKMCount, it.gtin, it.taskId)
         }
 
@@ -332,7 +329,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
 
 
-    private val progressObserver2 = Observer<Boolean> {
+    private val horizontalProgressObserver = Observer<Boolean> {
         countDownTimer = object :CountDownTimer(3000L, 1000L){
             override fun onTick(p0: Long) {
                 binding.horizontalProgress.isIndeterminate = true
@@ -394,17 +391,31 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
     }
 
-    private val failedServerKMListObserver = Observer<List<String?>?> {
-        viewModel2.checkKMFromServer(
-            it!!,
-            navArg.taskInfo.id
-        )
+    private val scannedNotVerifiedKMListObserver = Observer<List<String?>?> {
+        try {
+            viewModel2.checkKMFromServer(
+                it!!,
+                navArg.taskInfo.id
+            )
+        } catch (e:Exception){
+            snackBar(getString(R.string.unknown_error))
+        }
+
     }
 
     private val taskStatusObserver = Observer<String?> {
         when (it) {
+
+            TaskStatus.NEW.name -> {
+                binding.taskStatus.visible()
+                binding.taskStatus.setBackgroundResource(R.drawable.new_status_back)
+                binding.taskStatus.text = binding.root.context.getString(R.string.new_status)
+                binding.taskStatus.setTextColor(ContextCompat.getColor(binding.root.context, R.color.new_status_text))
+
+            }
+
             TaskStatus.PROCESS.name -> {
-                viewModel.failedServerKMList(navArg.taskInfo.id)
+                viewModel.scannedNotVerifiedKMList(navArg.taskInfo.id)
                 binding.taskStatus.visible()
                 binding.taskStatus.setBackgroundResource(R.drawable.process_status_back)
                 binding.taskStatus.setText(R.string.process)
