@@ -10,7 +10,7 @@ interface AppDatabaseRepository {
 
     suspend fun updateKM(kmModel: KMModel)
 
-    suspend fun failedServerKmList(taskId: Int?): List<String?>
+    suspend fun scannedNotVerifiedKmList(taskId: Int?): List<String?>
 
     suspend fun getWaitingKMCount(gtin: String?, taskId:Int?): LimitTotalWaitingKM?
 

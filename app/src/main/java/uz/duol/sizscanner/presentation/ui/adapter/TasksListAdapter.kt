@@ -46,6 +46,15 @@ class TasksListAdapter : RecyclerView.Adapter<TasksListAdapter.ViewHolder>() {
             binding.date.text = taskInfo.dateStr?.substring(0,10)?:""
 
             when (taskInfo.conditionStatus){
+
+                TaskStatus.NEW.name -> {
+                    binding.taskStatus.visible()
+                    binding.taskStatus.setBackgroundResource(R.drawable.new_status_back)
+                    binding.taskStatus.text = binding.root.context.getString(R.string.new_status)
+                    binding.taskStatus.setTextColor(ContextCompat.getColor(binding.root.context, R.color.new_status_text))
+
+                }
+
                 TaskStatus.PROCESS.name -> {
                     binding.taskStatus.visible()
                     binding.taskStatus.setBackgroundResource(R.drawable.process_status_back)

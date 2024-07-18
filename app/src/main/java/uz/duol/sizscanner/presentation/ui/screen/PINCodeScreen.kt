@@ -1,6 +1,8 @@
 package uz.duol.sizscanner.presentation.ui.screen
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.provider.Settings.Secure
 import android.util.Log
 import android.view.View
 import android.view.animation.Animation
@@ -14,7 +16,6 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
 import com.google.android.material.textview.MaterialTextView
-import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import uz.duol.sizscanner.R
 import uz.duol.sizscanner.data.remote.response.CheckPinResponse
@@ -28,8 +29,6 @@ import uz.duol.sizscanner.utils.gone
 import uz.duol.sizscanner.utils.isEnabled
 import uz.duol.sizscanner.utils.snackBar
 import uz.duol.sizscanner.utils.systemVibrate
-import java.text.SimpleDateFormat
-import java.util.Date
 
 @AndroidEntryPoint
 class PINCodeScreen : Fragment(R.layout.pin_code_screen) {
@@ -120,9 +119,12 @@ class PINCodeScreen : Fragment(R.layout.pin_code_screen) {
         dot.setImageResource(R.drawable.pin_dot_item)
     }
 
+    @SuppressLint("HardwareIds")
     private fun checkAdd() {
         if (pinText.length == 6) {
-            viewModel.checkPin(pinText)
+            val deviceId = Secure.getString(requireContext().contentResolver, Secure.ANDROID_ID)
+            Log.d("DDDD", "deviceId: $deviceId")
+            viewModel.checkPin(pinText, deviceId)
             binding.eraseBtn.disable()
         }else {
             binding.eraseBtn.enable()

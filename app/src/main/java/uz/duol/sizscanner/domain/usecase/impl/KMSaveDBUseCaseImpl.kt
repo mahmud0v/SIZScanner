@@ -30,12 +30,12 @@ class KMSaveDBUseCaseImpl @Inject constructor(
     }
 
     @OptIn(DelicateCoroutinesApi::class)
-    override fun failedServerKMList(taskId:Int?): Flow<Result<List<String?>?>> {
+    override fun scannedNotVerifiedKMList(taskId:Int?): Flow<Result<List<String?>?>> {
         return channelFlow {
             while (!isClosedForSend){
                 try {
                     kotlinx.coroutines.delay(10000L)
-                    val response = appDatabaseRepository.failedServerKmList(taskId)
+                    val response = appDatabaseRepository.scannedNotVerifiedKmList(taskId)
                     send(Result.success(response))
                 }catch (e:Exception){
                     close()

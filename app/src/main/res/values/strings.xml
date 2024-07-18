@@ -53,5 +53,10 @@
     <string name="process">Процесс</string>
     <string name="closed">Закрыто</string>
     <string name="limit_scanner_km">%s отсканировал достаточное количество километров для продукта</string>
+    <string name="log_out">Выйти</string>
+    <string name="log_out_title">Выйти из система </string>
+    <string name="log_out_message">Вы действительно хотите выйти?</string>
+    <string name="user_conflict">Для входа в систему ранее вошедший в систему пользователь должен выйти из системы.</string>
+    <string name="new_status">Новый</string>
 
 </resources>

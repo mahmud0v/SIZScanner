@@ -1,7 +1,5 @@
 package uz.duol.sizscanner.presentation.viewmodel.pin
 
-import android.util.Log
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,9 +19,9 @@ class CheckPinViewModelImpl @Inject constructor(
     override val errorMessageLiveData = MutableLiveData<String>()
     override val progressLoadingLiveData = MutableLiveData<Boolean>()
 
-    override fun checkPin(pin: String) {
+    override fun checkPin(pin: String, deviceId: String?) {
         progressLoadingLiveData.value = true
-        checkPinUseCase.checkPin(pin).onEach {
+        checkPinUseCase.checkPin(pin, deviceId).onEach {
             it.onSuccess {
                 checkPinLiveData.value = it
             }

@@ -20,18 +20,14 @@ class TaskStatusUseCaseImpl @Inject constructor(
     @ApplicationContext val context: Context
 ) : TaskStatusUseCase {
 
-    override fun taskStatus(transactionId: Int?): Flow<Result<Boolean?>> {
+    override fun checkTaskStatus(transactionId: Int?): Flow<Result<Boolean?>> {
         return flow {
             if (isConnected()) {
-                val response = appRepository.taskState(transactionId)
-                when (response.body()?.status) {
+                val response = appRepository.checkTaskStatus(transactionId)
+                when (response.code()) {
                     in 200..209 -> {
-                        response.body()?.newToken?.let {
-                            sharedPreference.token = it
-                        }
                         emit(Result.success(response.body()!!.obj))
                     }
-
                     401 -> emit(Result.failure(Exception(context.getString(R.string.unauthorised))))
                     404 -> emit(Result.failure(Exception(context.getString(R.string.not_found))))
                     in 500..599 -> emit(Result.failure(Exception(context.getString(R.string.server_error))))
