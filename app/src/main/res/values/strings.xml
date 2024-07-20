@@ -25,7 +25,8 @@
     <string name="task_list">Список заданий</string>
     <string name="no_scanned">Не сканируется</string>
     <string name="failed_scanned">Ожидает синхронизации</string>
-    <string name="success_scanned">Успешно</string>
+    <string name="success_scanned">Товар успешно отсканирован</string>
+    <string name="fail_scanned">Произошла ошибка при сканировании продукта</string>
     <string name="enter_pin_code">Введите PIN-код</string>
     <string name="one_number">1</string>
     <string name="two_number">2</string>

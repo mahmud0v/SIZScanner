@@ -1,5 +1,6 @@
 package uz.duol.sizscanner.presentation.viewmodel.checkKM
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -32,9 +33,11 @@ class CheckKMViewModelImpl @Inject constructor(
     override val countNotVerifiedTaskGtinKMLiveData= MutableLiveData<WaitingGtinInfo?>()
     override val changeWaitingKMCountLiveData = MutableLiveData<ChangeWaitingGtinCountInfo?>()
     override val waitingKMForInsertLiveData = MutableLiveData<WaitingGtinInfo?>()
+    override val progressLiveData = MutableLiveData<Boolean>()
 
 
     override fun checkKMFromServer(kmList: List<String?>, transactionId:Int?) {
+        progressLiveData.value = true
         checkKMUsaCase.checkKMFromServer(kmList, transactionId).onEach {
 
             it.onSuccess {
@@ -45,6 +48,7 @@ class CheckKMViewModelImpl @Inject constructor(
                 errorMessageLiveData.value = it.message
 
             }
+            progressLiveData.value = false
         }.launchIn(viewModelScope)
     }
 

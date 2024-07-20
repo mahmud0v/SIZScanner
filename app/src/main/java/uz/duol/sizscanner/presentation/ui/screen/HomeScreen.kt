@@ -69,11 +69,12 @@ class HomeScreen : Fragment(R.layout.home_screen){
     }
 
     private val logoutObserver = Observer<Unit>{
-        Log.d("LLLL", "logout ")
         requireActivity().supportFragmentManager.popBackStack(
             "Screen",
             FragmentManager.POP_BACK_STACK_INCLUSIVE
         )
-        requireActivity().finish()
+
+        findNavController().navigate(R.id.PINCodeScreen)
+
     }
 }

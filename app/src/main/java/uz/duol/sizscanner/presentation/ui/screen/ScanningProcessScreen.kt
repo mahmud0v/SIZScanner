@@ -39,6 +39,7 @@ import uz.duol.sizscanner.data.remote.response.CheckKMResponse
 import uz.duol.sizscanner.data.remote.response.TaskItemResponse
 import uz.duol.sizscanner.databinding.ScanningProcessScreenBinding
 import uz.duol.sizscanner.presentation.ui.adapter.TaskItemListAdapter
+import uz.duol.sizscanner.presentation.ui.dialog.ResultDialog
 import uz.duol.sizscanner.presentation.viewmodel.checkKM.CheckKMViewModel
 import uz.duol.sizscanner.presentation.viewmodel.checkKM.CheckKMViewModelImpl
 import uz.duol.sizscanner.presentation.viewmodel.task.TaskItemListViewModel
@@ -185,6 +186,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         viewModel.errorTaskMainStatusLiveData.observe(viewLifecycleOwner, errorTaskMainStatusObserver)
         viewModel2.changeWaitingKMCountLiveData.observe(viewLifecycleOwner, changeWaitingKMCountObserver)
         viewModel2.waitingKMForInsertLiveData.observe(viewLifecycleOwner, waitingKMForInsertObserver)
+        viewModel2.progressLiveData.observe(viewLifecycleOwner, progressLiveObserver)
 
 
 
@@ -245,6 +247,14 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
     }
 
+    private val progressLiveObserver = Observer<Boolean>{
+        if (it) {
+            binding.progress.visible()
+        } else {
+            binding.progress.gone()
+        }
+    }
+
     private val waitingKMForInsertObserver = Observer<WaitingGtinInfo?> {
         try {
             if (it?.differenceKM!=0 && it?.differenceKM!! > it!!.gtinKMCountNotVerified!!){
@@ -301,22 +311,18 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
     }
 
     private val successCheckKMLiveDataObserver = Observer<CheckKMResponse?> {
-        it?.rows?.map { kmInfo ->
-            kmInfo?.kmsSold?.let { kmList ->
-                if (kmList.isNotEmpty()){
-                    val gtin = kmList[0]?.substring(2,16)
-                    viewModel2.changeWaitingKMCount(kmList.size, gtin, navArg.taskInfo.id)
-                    for (i in kmList.indices){
-                        viewModel2.kmChangeStatusScannedVerified(kmList[i])
-                        if (i == kmList.lastIndex) {
-                            page = 0
-                            taskItemList.clear()
-                            viewModel.taskItemList(navArg.taskInfo.id, page++, pageSize)
-                        }
-                    }
-                }
-            }
-        }
+        val  dialog = ResultDialog(getString(R.string.fail_scanned), R.drawable.success_icon)
+        dialog.show(requireActivity().supportFragmentManager, "Dialog")
+         val timer = object : CountDownTimer(1000L, 1000L){
+             override fun onTick(p0: Long) {
+
+             }
+
+             override fun onFinish() {
+                 dialog.dismiss()
+             }
+
+         }.start()
     }
 
     private val changeWaitingKMCountObserver = Observer<ChangeWaitingGtinCountInfo?>{
@@ -407,6 +413,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         when (it) {
 
             TaskStatus.NEW.name -> {
+                binding.beginBtn.visible()
                 binding.taskStatus.visible()
                 binding.taskStatus.setBackgroundResource(R.drawable.new_status_back)
                 binding.taskStatus.text = binding.root.context.getString(R.string.new_status)
@@ -417,6 +424,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
             TaskStatus.PROCESS.name -> {
                 viewModel.scannedNotVerifiedKMList(navArg.taskInfo.id)
                 binding.taskStatus.visible()
+                binding.beginBtn.visible()
                 binding.taskStatus.setBackgroundResource(R.drawable.process_status_back)
                 binding.taskStatus.setText(R.string.process)
                 binding.taskStatus.setTextColor(
@@ -428,6 +436,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
             }
 
             TaskStatus.CLOSED.name -> {
+                binding.beginBtn.gone()
                 binding.taskStatus.visible()
                 binding.taskStatus.setBackgroundResource(R.drawable.closed_status_back)
                 binding.taskStatus.setText(R.string.closed)
@@ -531,23 +540,18 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
 
     private val errorMessageObserver2 = Observer<String> {
-        if (it == getString(R.string.unauthorised)) {
-            findNavController().navigate(getString(R.string.unauthorised))
-        }
+        val dialog = ResultDialog(it, R.drawable.error_icon)
+        val timer = object : CountDownTimer(1000L, 1000L){
+            override fun onTick(p0: Long) {
 
-        kmList.map {
-            try {
-                viewModel.insertKMDB(
-                    KMModel(
-                        km = it!!,
-                        taskId = navArg.taskInfo.id,
-                        kmStatusServer = KMStatusServer.FAILED.name
-                    )
-                )
-            } catch (e: Exception) {
-                e.printStackTrace()
             }
-        }
+
+            override fun onFinish() {
+                dialog.dismiss()
+            }
+
+        }.start()
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -600,7 +604,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                     if (ScanConst.INTENT_USERMSG == intent.action) {
                         mScanner!!.aDecodeGetResult(mDecodeResult!!.recycle())
                         if (getString(R.string.read_fail) != mDecodeResult.toString() && start) {
-                            viewModel.existKM(mDecodeResult.toString())
+                            viewModel2.checkKMFromServer(mutableListOf(mDecodeResult.toString()), navArg.taskInfo.id)
                         }
                     } else if (ScanConst.INTENT_EVENT == intent.action) {
                         val result =

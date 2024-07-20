@@ -18,6 +18,7 @@ interface CheckKMViewModel {
     val countNotVerifiedTaskGtinKMLiveData:LiveData<WaitingGtinInfo?>
     val changeWaitingKMCountLiveData:LiveData<ChangeWaitingGtinCountInfo?>
     val waitingKMForInsertLiveData:LiveData<WaitingGtinInfo?>
+    val progressLiveData:LiveData<Boolean>
 
     fun checkKMFromServer(kmList:List<String?>, transactionId:Int?)
     fun getWaitingKMCount(gtin:String?, taskId: Int?)
