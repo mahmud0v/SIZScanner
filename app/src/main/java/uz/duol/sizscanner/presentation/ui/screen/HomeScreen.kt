@@ -36,6 +36,10 @@ class HomeScreen : Fragment(R.layout.home_screen){
             findNavController().navigate(HomeScreenDirections.actionHomeScreenToTasksScreen())
         }
 
+        binding.swipeRefresh.setOnRefreshListener {
+            viewModel.newTaskList(0,10)
+        }
+
         binding.logOut.setOnClickListener {
             val dialog = AlertDialog.Builder(requireContext())
                 .setTitle(getString(R.string.log_out_title))
@@ -56,6 +60,7 @@ class HomeScreen : Fragment(R.layout.home_screen){
     }
 
     private val totalSizeObserver = Observer<Int>{
+        binding.swipeRefresh.isRefreshing = false
         binding.taskSize.text = it.toString()
     }
 

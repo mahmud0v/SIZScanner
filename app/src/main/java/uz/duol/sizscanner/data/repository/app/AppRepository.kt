@@ -11,7 +11,7 @@ import uz.duol.sizscanner.data.remote.response.TaskResponse
 
 interface AppRepository {
 
-    suspend fun checkPin(pin:String, deviceId:String?) : Response<ApiResponse<CheckPinResponse>>
+    suspend fun checkPin(pin:String, deviceId:String?, fcmToken:String?) : Response<ApiResponse<CheckPinResponse>>
 
     suspend fun newTaskList(page:Int, size:Int) : Response<ApiResponse<PageList<List<TaskResponse>>>>
 

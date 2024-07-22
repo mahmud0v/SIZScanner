@@ -21,10 +21,12 @@ android {
         targetSdk 34
         versionCode 1
         versionName "1.0"
-        buildConfigField('String','BASE_URL','"http://akfa.onlinesavdo.com:7880/"')
+        buildConfigField('String','BASE_URL','"http://akfa.onlinesavdo.com:7778/"')
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
+
+    //http://akfa.onlinesavdo.com:7778/
 
     buildTypes {
         release {
@@ -45,6 +47,13 @@ android {
         buildConfig true
     }
 
+    /**
+     *  Key Store path      ->    appkeystore/TZDKeyStore.jks
+     *  Key Store Password  ->    AKFATZD
+     *  Key alias           ->    upload
+     *  Key Password        ->    AKFATZD
+     *
+     */
 
 }
 

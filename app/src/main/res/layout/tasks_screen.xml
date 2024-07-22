@@ -20,6 +20,7 @@
             app:title="@string/task_list"
             android:background="@color/white"
             app:titleCentered="true"
+            app:titleTextColor="@color/text_color"
             android:id="@+id/toolbar"
 
             />

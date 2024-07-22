@@ -15,7 +15,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.textview.MaterialTextView
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
 import uz.duol.sizscanner.R
 import uz.duol.sizscanner.data.remote.response.CheckPinResponse
@@ -34,9 +36,11 @@ import uz.duol.sizscanner.utils.systemVibrate
 class PINCodeScreen : Fragment(R.layout.pin_code_screen) {
     private val binding by viewBinding(PinCodeScreenBinding::bind)
     private val viewModel: CheckPinViewModel by viewModels<CheckPinViewModelImpl>()
+    private var fcmToken:String? = null
     private var pinText = ""
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        getFCMToken()
         clickNumber()
         clickEraseBtn()
         backPressDispatcher()
@@ -124,7 +128,7 @@ class PINCodeScreen : Fragment(R.layout.pin_code_screen) {
         if (pinText.length == 6) {
             val deviceId = Secure.getString(requireContext().contentResolver, Secure.ANDROID_ID)
             Log.d("DDDD", "deviceId: $deviceId")
-            viewModel.checkPin(pinText, deviceId)
+            viewModel.checkPin(pinText, deviceId, fcmToken)
             binding.eraseBtn.disable()
         }else {
             binding.eraseBtn.enable()
@@ -163,6 +167,17 @@ class PINCodeScreen : Fragment(R.layout.pin_code_screen) {
             val imageView = binding.llPinDot[i] as ImageView
             imageView.setImageResource(R.drawable.pin_dot_item)
         }
+    }
+
+    private fun getFCMToken() {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("DDDD", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            fcmToken = task.result
+            Log.d("DDDD", "getFCMToken: $fcmToken")
+        })
     }
 
 

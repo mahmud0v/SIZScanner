@@ -9,5 +9,5 @@ interface CheckPinViewModel {
     val errorMessageLiveData:LiveData<String>
     val progressLoadingLiveData:LiveData<Boolean>
 
-    fun checkPin(pin:String, deviceId:String?)
+    fun checkPin(pin:String, deviceId:String?, fcmToken:String?)
 }

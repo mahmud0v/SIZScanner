@@ -22,10 +22,10 @@ class CheckPinUseCaseImpl @Inject constructor(
     @ApplicationContext val context:Context
 ): CheckPinUseCase {
 
-    override fun checkPin(pin: String, deviceId: String?): Flow<Result<CheckPinResponse?>> {
+    override fun checkPin(pin: String, deviceId: String?, fcmToken: String?): Flow<Result<CheckPinResponse?>> {
         return flow {
             if (isConnected()){
-                val response = appRepository.checkPin(pin, deviceId)
+                val response = appRepository.checkPin(pin, deviceId, fcmToken)
                 when (response.code()) {
                     in 200..209 -> {
                         response.body()?.accessToken?.let {

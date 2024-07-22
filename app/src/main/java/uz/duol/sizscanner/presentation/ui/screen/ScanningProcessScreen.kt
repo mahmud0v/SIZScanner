@@ -316,6 +316,17 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                     }
                 }
             }
+
+            kmInfo?.kmsNotSold?.let { kmList ->
+                kmList.map {
+                    viewModel2.deleteKM(it)
+                }
+                if (kmList.isNotEmpty()) {
+                    snackBar(getString(R.string.not_found_server_km))
+                    val gtin = kmList[0]?.substring(2, 16)
+                    viewModel2.changeWaitingKMCount(kmList.size, gtin, navArg.taskInfo.id)
+                }
+            }
         }
     }
 
@@ -352,6 +363,8 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                 e.printStackTrace()
             }
 
+        } else {
+            snackBar(getString(R.string.duplicate_km))
         }
     }
 
@@ -407,6 +420,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         when (it) {
 
             TaskStatus.NEW.name -> {
+                viewModel.scannedNotVerifiedKMList(navArg.taskInfo.id)
                 binding.taskStatus.visible()
                 binding.taskStatus.setBackgroundResource(R.drawable.new_status_back)
                 binding.taskStatus.text = binding.root.context.getString(R.string.new_status)

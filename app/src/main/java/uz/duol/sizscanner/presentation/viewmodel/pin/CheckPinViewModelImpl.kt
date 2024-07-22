@@ -19,9 +19,9 @@ class CheckPinViewModelImpl @Inject constructor(
     override val errorMessageLiveData = MutableLiveData<String>()
     override val progressLoadingLiveData = MutableLiveData<Boolean>()
 
-    override fun checkPin(pin: String, deviceId: String?) {
+    override fun checkPin(pin: String, deviceId: String?, fcmToken: String?) {
         progressLoadingLiveData.value = true
-        checkPinUseCase.checkPin(pin, deviceId).onEach {
+        checkPinUseCase.checkPin(pin, deviceId, fcmToken).onEach {
             it.onSuccess {
                 checkPinLiveData.value = it
             }

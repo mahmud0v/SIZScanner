@@ -18,10 +18,10 @@ class AppRepositoryImpl @Inject constructor(
 ) : AppRepository {
 
 
-    override suspend fun checkPin(pin: String, deviceId: String?): Response<ApiResponse<CheckPinResponse>> {
+    override suspend fun checkPin(pin: String, deviceId: String?, fcmToken: String?): Response<ApiResponse<CheckPinResponse>> {
         return apiService.checkPin(
             "osm/mobile-user/auth/login",
-            LoginRequest(pin, deviceId)
+            LoginRequest(pin, deviceId, fcmToken)
         )
     }
 

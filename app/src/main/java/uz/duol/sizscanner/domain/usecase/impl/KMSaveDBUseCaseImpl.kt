@@ -34,7 +34,7 @@ class KMSaveDBUseCaseImpl @Inject constructor(
         return channelFlow {
             while (!isClosedForSend){
                 try {
-                    kotlinx.coroutines.delay(10000L)
+                    kotlinx.coroutines.delay(5000L)
                     val response = appDatabaseRepository.scannedNotVerifiedKmList(taskId)
                     send(Result.success(response))
                 }catch (e:Exception){

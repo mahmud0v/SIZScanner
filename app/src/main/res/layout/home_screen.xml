@@ -1,69 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/user_top_gradient"
+    android:id="@+id/swipeRefresh"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/logOut"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="10dp"
-        android:background="@drawable/logout_back"
-        android:src="@drawable/logout"
-        android:paddingTop="3dp"
-        android:paddingBottom="3dp"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-
-        />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:background="@drawable/user_top_gradient"
+        android:layout_height="match_parent">
 
 
-    <ImageView
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:src="@drawable/user"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="50dp"
-        android:layout_marginLeft="20dp"
-        android:id="@+id/userIcon"
-        />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/logOut"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/logout_back"
+            android:src="@drawable/logout"
+            android:paddingTop="3dp"
+            android:paddingBottom="3dp"
+            android:paddingRight="10dp"
+            android:paddingLeft="10dp"
+
+            />
 
 
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/user"
-        android:id="@+id/userTitle"
-        android:gravity="center"
-        app:layout_constraintTop_toTopOf="@id/userIcon"
-        app:layout_constraintLeft_toRightOf="@id/userIcon"
-        android:layout_gravity="center_vertical"
-        android:textColor="@color/white"
-        android:textSize="14sp"
-        android:layout_marginLeft="16dp"
-        />
+        <ImageView
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:src="@drawable/user"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            android:layout_marginTop="50dp"
+            android:layout_marginLeft="20dp"
+            android:id="@+id/userIcon"
+            />
 
-    <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="start"
-        tools:text="@string/user_1"
-        app:layout_constraintBottom_toBottomOf="@id/userIcon"
-        android:id="@+id/userText"
-        android:textColor="@color/white"
-        app:layout_constraintLeft_toRightOf="@id/userIcon"
-        android:layout_marginTop="10dp"
-        android:textSize="24sp"
-        android:layout_marginLeft="16dp"
-        />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/user"
+            android:id="@+id/userTitle"
+            android:gravity="center"
+            app:layout_constraintTop_toTopOf="@id/userIcon"
+            app:layout_constraintLeft_toRightOf="@id/userIcon"
+            android:layout_gravity="center_vertical"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_marginLeft="16dp"
+            />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            tools:text="@string/user_1"
+            app:layout_constraintBottom_toBottomOf="@id/userIcon"
+            android:id="@+id/userText"
+            android:textColor="@color/white"
+            app:layout_constraintLeft_toRightOf="@id/userIcon"
+            android:layout_marginTop="10dp"
+            android:textSize="24sp"
+            android:layout_marginLeft="16dp"
+            />
 
 
 
@@ -100,17 +106,17 @@
                     android:layout_gravity="center_horizontal"
                     />
 
-               <TextView
-                   android:layout_width="wrap_content"
-                   android:layout_height="wrap_content"
-                   android:text="@string/tasks"
-                   android:layout_gravity="center"
-                   android:layout_marginTop="8dp"
-                   android:textSize="16sp"
-                   android:textStyle="bold"
-                   android:textColor="@color/icon_color"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/tasks"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="8dp"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/icon_color"
 
-                   />
+                    />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:layout_width="wrap_content"
@@ -128,16 +134,8 @@
 
 
 
-
-
-
-
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
-
-
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
