@@ -59,6 +59,6 @@
     <string name="user_conflict">Для входа в систему ранее вошедший в систему пользователь должен выйти из системы.</string>
     <string name="new_status">Новый</string>
     <string name="duplicate_km">Этот продукт был ранее отсканирован</string>
-    <string name="not_found_server_km">Такого км не найдено в базе данных</string>
+    <string name="not_found_server_km">Данного км нет в базе данных или он был отсканирован</string>
 
 </resources>

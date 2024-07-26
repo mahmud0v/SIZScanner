@@ -2,6 +2,7 @@ package uz.duol.sizscanner.presentation.ui.screen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -108,8 +109,10 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
 
     private val progressObserver = Observer<Boolean>{
         if (it){
+            Log.d("WWWW", "progress visible ")
             binding.progress.visible()
         }else {
+            Log.d("WWWW", "progress gone ")
             binding.progress.gone()
         }
     }

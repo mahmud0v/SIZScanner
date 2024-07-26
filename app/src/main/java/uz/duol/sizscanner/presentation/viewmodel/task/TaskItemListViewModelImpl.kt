@@ -1,5 +1,6 @@
 package uz.duol.sizscanner.presentation.viewmodel.task
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -161,6 +162,7 @@ class TaskItemListViewModelImpl @Inject constructor(
         gtinUseCase.existsKM(km).onEach {
             it.onSuccess {
                 existKMLiveData.value = ExistsKMInfo(km,it)
+                Log.d("QQQQ", "existKM: $it")
             }
 
             it.onFailure {}

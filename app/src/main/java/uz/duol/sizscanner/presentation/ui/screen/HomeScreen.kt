@@ -77,6 +77,6 @@ class HomeScreen : Fragment(R.layout.home_screen){
             "Screen",
             FragmentManager.POP_BACK_STACK_INCLUSIVE
         )
-        requireActivity().finish()
+        findNavController().navigate(R.id.PINCodeScreen)
     }
 }

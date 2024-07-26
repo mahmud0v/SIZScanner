@@ -1,5 +1,6 @@
 package uz.duol.sizscanner.presentation.viewmodel.checkKM
 
+import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -92,6 +93,7 @@ class CheckKMViewModelImpl @Inject constructor(
                     insertKM = km,
                     gtinKMCountNotVerified = gtinKMCountNotVerified
                 )
+                Log.d("QQQQ", "getWaitingKMForInsert: gtin: ${gtin}")
             }
 
             it.onFailure {}
@@ -114,6 +116,7 @@ class CheckKMViewModelImpl @Inject constructor(
         checkKMUsaCase.allTaskGtinKM(taskId, gtin).onEach {
             it.onSuccess {
                 allTaskGtinKMLiveData.value = ExistsKMInfo(existsKMInfo?.km, existsKMInfo?.exist, it)
+                Log.d("QQQQ", "allTaskGtinKM: ${it}")
             }
 
             it.onFailure {

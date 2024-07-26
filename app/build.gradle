@@ -47,6 +47,13 @@ android {
         buildConfig true
     }
 
+//    splits {
+//        abi {
+//            enable true
+//            universalApk true
+//        }
+//    }
+
     /**
      *  Key Store path      ->    appkeystore/TZDKeyStore.jks
      *  Key Store Password  ->    AKFATZD
