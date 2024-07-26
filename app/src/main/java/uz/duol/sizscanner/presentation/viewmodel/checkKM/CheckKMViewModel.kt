@@ -20,7 +20,7 @@ interface CheckKMViewModel {
     val waitingKMForInsertLiveData:LiveData<WaitingGtinInfo?>
     val progressLiveData:LiveData<Boolean>
 
-    fun checkKMFromServer(kmList:List<String?>, transactionId:Int?)
+    fun checkKMFromServer(km: String?, transactionId:Int?)
     fun getWaitingKMCount(gtin:String?, taskId: Int?)
     fun changeWaitingKMCount(count:Int, gtin:String?, taskId: Int?)
     fun getWaitingKMForInsert(gtin: String?, taskId: Int?, km: String?, gtinKMCountNotVerified:Int?)

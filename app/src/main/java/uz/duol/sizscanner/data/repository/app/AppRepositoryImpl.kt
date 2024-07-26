@@ -49,10 +49,10 @@ class AppRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun checkKMFromServer(kmList: List<String?>, transactionId:Int?): Response<ApiResponse<CheckKMResponse>> {
+    override suspend fun checkKMFromServer(km: String?, transactionId: Int?): Response<ApiResponse<CheckKMResponse>> {
         return apiService.checkKMFromServer(
             "osm/mobile-user/sync-status",
-            CheckKMRequest(kmList,transactionId)
+            CheckKMRequest(km, transactionId)
         )
     }
 

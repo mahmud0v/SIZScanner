@@ -17,7 +17,7 @@ interface AppRepository {
 
     suspend fun taskItemList(taskItemId:Int?, page: Int, size: Int): Response<ApiResponse<PageList<List<TaskItemResponse>>>>
 
-    suspend fun checkKMFromServer(kmList:List<String?>, transactionId:Int?): Response<ApiResponse<CheckKMResponse>>
+    suspend fun checkKMFromServer(km: String?, transactionId:Int?): Response<ApiResponse<CheckKMResponse>>
 
     suspend fun checkTaskStatus(transactionId:Int?): Response<ApiResponse<Boolean>>
 

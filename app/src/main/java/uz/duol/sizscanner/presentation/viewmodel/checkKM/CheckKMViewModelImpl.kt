@@ -1,6 +1,5 @@
 package uz.duol.sizscanner.presentation.viewmodel.checkKM
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -36,9 +35,9 @@ class CheckKMViewModelImpl @Inject constructor(
     override val progressLiveData = MutableLiveData<Boolean>()
 
 
-    override fun checkKMFromServer(kmList: List<String?>, transactionId:Int?) {
+    override fun checkKMFromServer(km: String?, transactionId:Int?) {
         progressLiveData.value = true
-        checkKMUsaCase.checkKMFromServer(kmList, transactionId).onEach {
+        checkKMUsaCase.checkKMFromServer(km, transactionId).onEach {
 
             it.onSuccess {
                 successCheckKMLiveData.value = it

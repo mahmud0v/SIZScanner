@@ -44,7 +44,6 @@ import uz.duol.sizscanner.presentation.viewmodel.checkKM.CheckKMViewModel
 import uz.duol.sizscanner.presentation.viewmodel.checkKM.CheckKMViewModelImpl
 import uz.duol.sizscanner.presentation.viewmodel.task.TaskItemListViewModel
 import uz.duol.sizscanner.presentation.viewmodel.task.TaskItemListViewModelImpl
-import uz.duol.sizscanner.utils.KMStatusServer
 import uz.duol.sizscanner.utils.MarkingProductStatus
 import uz.duol.sizscanner.utils.TaskStatus
 import uz.duol.sizscanner.utils.gone
@@ -173,7 +172,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         viewModel.progressLoadingLiveData.observe(viewLifecycleOwner, progressObserver)
         viewModel.horizontalProgressLiveData.observe(viewLifecycleOwner, horizontalProgressObserver)
         viewModel.taskStatusLiveData.observe(viewLifecycleOwner, taskStatusObserver)
-        viewModel.scannedNotVerifiedKMListLiveData.observe(viewLifecycleOwner, scannedNotVerifiedKMListObserver)
+//        viewModel.scannedNotVerifiedKMListLiveData.observe(viewLifecycleOwner, scannedNotVerifiedKMListObserver)
         viewModel.taskMainStatusLiveData.observe(viewLifecycleOwner, taskMainStatusObserver)
         viewModel.errorScannedNotVerifiedKMListLiveData.observe(
             viewLifecycleOwner,
@@ -397,17 +396,17 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
     }
 
-    private val scannedNotVerifiedKMListObserver = Observer<List<String?>?> {
-        try {
-            viewModel2.checkKMFromServer(
-                it!!,
-                navArg.taskInfo.id
-            )
-        } catch (e:Exception){
-            snackBar(getString(R.string.unknown_error))
-        }
-
-    }
+//    private val scannedNotVerifiedKMListObserver = Observer<List<String?>?> {
+//        try {
+//            viewModel2.checkKMFromServer(
+//                it!!,
+//                navArg.taskInfo.id
+//            )
+//        } catch (e:Exception){
+//            snackBar(getString(R.string.unknown_error))
+//        }
+//
+//    }
 
     private val taskStatusObserver = Observer<String?> {
         when (it) {
@@ -557,12 +556,14 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
     @SuppressLint("NotifyDataSetChanged")
     private val taskItemListObserver = Observer<List<TaskItemResponse>?> {
         binding.swipeRefresh.isRefreshing = false
-        it?.let { taskList ->
-            for (i in taskList.indices) {
-                viewModel.existGtin(taskList[i].gtin, navArg.taskInfo.id, taskList[i])
-                if (i == taskList.size - 1) {
-                    taskListLastItemListener?.invoke()
-                }
+        it?.let {
+            taskItemList.addAll(it)
+            taskItemListAdapter.differ.submitList(taskItemList)
+            taskItemListAdapter.notifyDataSetChanged()
+            if (taskItemList.isNotEmpty()){
+                binding.llEmptyBackground.gone()
+            }else {
+                binding.llEmptyBackground.visible()
             }
         }
     }
@@ -604,7 +605,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                     if (ScanConst.INTENT_USERMSG == intent.action) {
                         mScanner!!.aDecodeGetResult(mDecodeResult!!.recycle())
                         if (getString(R.string.read_fail) != mDecodeResult.toString() && start) {
-                            viewModel2.checkKMFromServer(mutableListOf(mDecodeResult.toString()), navArg.taskInfo.id)
+                            viewModel2.checkKMFromServer(mDecodeResult.toString(), navArg.taskInfo.id)
                         }
                     } else if (ScanConst.INTENT_EVENT == intent.action) {
                         val result =

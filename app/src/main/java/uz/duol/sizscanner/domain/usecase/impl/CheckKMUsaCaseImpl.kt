@@ -5,7 +5,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import uz.duol.sizscanner.R
@@ -24,10 +23,10 @@ class CheckKMUsaCaseImpl @Inject constructor(
     @ApplicationContext val context: Context
 ) : CheckKMUsaCase {
 
-    override fun checkKMFromServer(kmList: List<String?>, transactionId:Int?): Flow<Result<CheckKMResponse?>> {
+    override fun checkKMFromServer(km: String?, transactionId:Int?): Flow<Result<CheckKMResponse?>> {
         return flow {
                 if (isConnected()) {
-                    val response = appRepository.checkKMFromServer(kmList, transactionId)
+                    val response = appRepository.checkKMFromServer(km, transactionId)
                     when (response.code()) {
                         in 200..209 -> {
                             emit(Result.success(response.body()!!.obj))
