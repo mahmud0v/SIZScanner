@@ -239,7 +239,8 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
     private val addWaitingKMSaveDBObserver = Observer<InsertKMInfo> {
         if (it.rowId != null && it.rowId > 0) {
             val gtin = if(it.km?.contains(29.toChar()) == true){
-                it.km?.substring(3, 17)
+                val newKM = it.km?.replace(29.toChar().toString(),"")
+                newKM?.substring(2, 16)
             } else {
                 it.km?.substring(2,16)
             }
@@ -256,7 +257,8 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
             Log.d("QQQQ", "differenceKM: ${it?.differenceKM}  ,  gtinKMCountNotVerified: ${it?.gtinKMCountNotVerified} ")
             if (it?.differenceKM!=0 && it?.differenceKM!! > it!!.gtinKMCountNotVerified!!){
                 val gtin = if(it.insertKM?.contains(29.toChar()) == true){
-                    it.insertKM?.substring(3, 17)
+                    val newKM = it.insertKM?.replace(29.toChar().toString(), "")
+                    newKM?.substring(2, 16)
                 } else {
                     it.insertKM?.substring(2,16)
                 }
@@ -280,7 +282,8 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
     private val allTaskGtinKMLiveDataObserver = Observer<ExistsKMInfo?>{
         val gtin = if(it?.km?.contains(29.toChar()) == true){
-            it?.km?.substring(3, 17)
+            val newKM = it?.km?.replace(29.toChar().toString(),"")
+            newKM?.substring(2, 16)
         } else {
             it?.km?.substring(2,16)
         }
@@ -322,7 +325,8 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
             kmInfo?.kmsSold?.let { kmList ->
                 if (kmList.isNotEmpty()){
                     val gtin = if(kmList[0]?.contains(29.toChar()) == true){
-                        kmList[0]?.substring(3, 17)
+                        val newKM = kmList[0]?.replace(29.toChar().toString(),"")
+                        newKM?.substring(2, 16)
                     } else {
                         kmList[0]?.substring(2,16)
                     }
@@ -345,7 +349,8 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                 if (kmList.isNotEmpty()) {
                     snackBar(getString(R.string.not_found_server_km))
                     val gtin = if(kmList[0]?.contains(29.toChar()) == true){
-                        kmList[0]?.substring(3, 17)
+                        val newKM = kmList[0]?.replace(29.toChar().toString(), "")
+                        newKM?.substring(2, 16)
                     } else {
                         kmList[0]?.substring(2,16)
                     }
@@ -384,7 +389,8 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         if (it.exist == 0) {
             try {
                 val gtin = if(it.km?.contains(29.toChar()) == true){
-                    it.km?.substring(3, 17)
+                    val newKM = it.km?.replace(29.toChar().toString(),"")
+                    newKM?.substring(2, 16)
                 } else {
                     it.km?.substring(2,16)
                 }
