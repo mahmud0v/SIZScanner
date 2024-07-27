@@ -20,16 +20,18 @@
 
 
     <com.google.android.material.textview.MaterialTextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toRightOf="@id/snackIcon"
         app:layout_constraintTop_toTopOf="@id/snackIcon"
         app:layout_constraintBottom_toBottomOf="@id/snackIcon"
-        android:layout_marginLeft="24dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="56dp"
+        android:layout_marginRight="24dp"
         android:fontFamily="@font/sf_pro_display"
         android:textSize="18sp"
         android:id="@+id/snackText"
-        tools:text="Qandaydur xatolik sodir bo'ldi deb akfa savdodan aytildi"
+        android:text="Qandaydur xatolik sodir bo'ldi deb akfa savdodan aytildi"
         android:textFontWeight="590"
         android:textColor="@color/text_color"
         />

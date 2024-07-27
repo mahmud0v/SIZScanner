@@ -7,6 +7,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -14,6 +15,7 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.activity.OnBackPressedCallback
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -23,6 +25,10 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.SnackbarLayout
+import com.google.android.material.snackbar.SnackbarContentLayout
+import com.google.android.material.textview.MaterialTextView
 import dagger.hilt.android.AndroidEntryPoint
 import device.common.DecodeResult
 import device.common.DecodeStateCallback
@@ -53,7 +59,7 @@ import uz.duol.sizscanner.utils.visible
 
 @AndroidEntryPoint
 class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), LifecycleOwner {
-    private var _binding:ScanningProcessScreenBinding? = null
+    private var _binding: ScanningProcessScreenBinding? = null
     private val binding get() = _binding!!
     private val viewModel: TaskItemListViewModel by viewModels<TaskItemListViewModelImpl>()
     private val viewModel2: CheckKMViewModel by viewModels<CheckKMViewModelImpl>()
@@ -144,7 +150,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         }
 
         taskListLastItemListener = {
-            val timer = object : CountDownTimer(1000L, 1000L){
+            val timer = object : CountDownTimer(1000L, 1000L) {
                 override fun onTick(p0: Long) {}
 
                 override fun onFinish() {
@@ -164,7 +170,10 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
             viewLifecycleOwner,
             successCheckKMLiveDataObserver
         )
-        viewModel2.countNotVerifiedTaskGtinKMLiveData.observe(viewLifecycleOwner, countNotVerifiedTaskGtinKMLiveData)
+        viewModel2.countNotVerifiedTaskGtinKMLiveData.observe(
+            viewLifecycleOwner,
+            countNotVerifiedTaskGtinKMLiveData
+        )
 
         viewModel.taskItemListLiveData.observe(viewLifecycleOwner, taskItemListObserver)
         viewModel.pageSizeLiveData.observe(viewLifecycleOwner, pageSizeObserver)
@@ -182,9 +191,18 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         viewModel.getAllGtinDBLiveData.observe(viewLifecycleOwner, getAllGtinDBObserver)
         viewModel.addWaitingKMSaveDB.observe(viewLifecycleOwner, addWaitingKMSaveDBObserver)
         viewModel.existKMLiveData.observe(viewLifecycleOwner, existKMLiveDataObserver)
-        viewModel.errorTaskMainStatusLiveData.observe(viewLifecycleOwner, errorTaskMainStatusObserver)
-        viewModel2.changeWaitingKMCountLiveData.observe(viewLifecycleOwner, changeWaitingKMCountObserver)
-        viewModel2.waitingKMForInsertLiveData.observe(viewLifecycleOwner, waitingKMForInsertObserver)
+        viewModel.errorTaskMainStatusLiveData.observe(
+            viewLifecycleOwner,
+            errorTaskMainStatusObserver
+        )
+        viewModel2.changeWaitingKMCountLiveData.observe(
+            viewLifecycleOwner,
+            changeWaitingKMCountObserver
+        )
+        viewModel2.waitingKMForInsertLiveData.observe(
+            viewLifecycleOwner,
+            waitingKMForInsertObserver
+        )
         viewModel2.progressLiveData.observe(viewLifecycleOwner, progressLiveObserver)
 
 
@@ -246,7 +264,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
     }
 
-    private val progressLiveObserver = Observer<Boolean>{
+    private val progressLiveObserver = Observer<Boolean> {
         if (it) {
             binding.progress.visible()
         } else {
@@ -256,7 +274,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
     private val waitingKMForInsertObserver = Observer<WaitingGtinInfo?> {
         try {
-            if (it?.differenceKM!=0 && it?.differenceKM!! > it!!.gtinKMCountNotVerified!!){
+            if (it?.differenceKM != 0 && it?.differenceKM!! > it!!.gtinKMCountNotVerified!!) {
                 viewModel.insertKMDB(
                     KMModel(
                         km = it?.insertKM!!,
@@ -275,8 +293,13 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
     }
 
-    private val allTaskGtinKMLiveDataObserver = Observer<ExistsKMInfo?>{
-        viewModel2.getWaitingKMForInsert(it?.km?.substring(2, 16), navArg.taskInfo.id, it?.km, it?.gtinKMCount)
+    private val allTaskGtinKMLiveDataObserver = Observer<ExistsKMInfo?> {
+        viewModel2.getWaitingKMForInsert(
+            it?.km?.substring(2, 16),
+            navArg.taskInfo.id,
+            it?.km,
+            it?.gtinKMCount
+        )
     }
 
     private val errorTaskMainStatusObserver = Observer<String> {
@@ -291,8 +314,8 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         viewModel.getAllGtinDB(navArg.taskInfo.id)
     }
 
-    private val countNotVerifiedTaskGtinKMLiveData = Observer<WaitingGtinInfo?>{
-        if (it?.waitingGtinCount !=null && it.kmModelCountKM !=null){
+    private val countNotVerifiedTaskGtinKMLiveData = Observer<WaitingGtinInfo?> {
+        if (it?.waitingGtinCount != null && it.kmModelCountKM != null) {
             if (it.differenceKM != 0 && it.waitingGtinCount < it.totalKM!!) {
                 val dbKm = it.waitingGtinCount + 1
                 viewModel.editWaitingKM(
@@ -309,33 +332,32 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
     }
 
+    @SuppressLint("RestrictedApi")
     private val successCheckKMLiveDataObserver = Observer<CheckKMResponse?> {
-        val  dialog = ResultDialog(getString(R.string.fail_scanned), R.drawable.success_icon)
-        dialog.show(requireActivity().supportFragmentManager, "Dialog")
-         val timer = object : CountDownTimer(1000L, 1000L){
-             override fun onTick(p0: Long) {
+        val snackbar = Snackbar.make(binding.progress, "", Snackbar.LENGTH_SHORT)
+        val layoutInflater = layoutInflater.inflate(R.layout.result_snack_bar, null)
+        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
+        val snackbarLayout = snackbar.view as SnackbarLayout
+        snackbarLayout.setPadding(0,0,0,0)
+        val snackIcon = layoutInflater.findViewById<ImageView>(R.id.snackIcon)
+        val snackText = layoutInflater.findViewById<MaterialTextView>(R.id.snackText)
+        snackIcon.setBackgroundResource(R.drawable.success_icon)
+        snackText.text = "Success scanned"
 
-             }
 
-             override fun onFinish() {
-                 dialog.dismiss()
-             }
-
-         }.start()
     }
 
-    private val changeWaitingKMCountObserver = Observer<ChangeWaitingGtinCountInfo?>{
-        it?.waitingKM?.let {waitingKM ->
-            val resultKMCount = waitingKM- it.countSuccessKM!!
+    private val changeWaitingKMCountObserver = Observer<ChangeWaitingGtinCountInfo?> {
+        it?.waitingKM?.let { waitingKM ->
+            val resultKMCount = waitingKM - it.countSuccessKM!!
             viewModel.editWaitingKM(resultKMCount, it.gtin, it.taskId)
         }
 
     }
 
 
-
     private val horizontalProgressObserver = Observer<Boolean> {
-        countDownTimer = object :CountDownTimer(3000L, 1000L){
+        countDownTimer = object : CountDownTimer(3000L, 1000L) {
             override fun onTick(p0: Long) {
                 binding.horizontalProgress.isIndeterminate = true
             }
@@ -416,7 +438,12 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                 binding.taskStatus.visible()
                 binding.taskStatus.setBackgroundResource(R.drawable.new_status_back)
                 binding.taskStatus.text = binding.root.context.getString(R.string.new_status)
-                binding.taskStatus.setTextColor(ContextCompat.getColor(binding.root.context, R.color.new_status_text))
+                binding.taskStatus.setTextColor(
+                    ContextCompat.getColor(
+                        binding.root.context,
+                        R.color.new_status_text
+                    )
+                )
 
             }
 
@@ -537,10 +564,9 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
     }
 
 
-
     private val errorMessageObserver2 = Observer<String> {
         val dialog = ResultDialog(it, R.drawable.error_icon)
-        val timer = object : CountDownTimer(1000L, 1000L){
+        val timer = object : CountDownTimer(1000L, 1000L) {
             override fun onTick(p0: Long) {
 
             }
@@ -560,9 +586,9 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
             taskItemList.addAll(it)
             taskItemListAdapter.differ.submitList(taskItemList)
             taskItemListAdapter.notifyDataSetChanged()
-            if (taskItemList.isNotEmpty()){
+            if (taskItemList.isNotEmpty()) {
                 binding.llEmptyBackground.gone()
-            }else {
+            } else {
                 binding.llEmptyBackground.visible()
             }
         }
@@ -573,19 +599,29 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         maxPage = it
     }
 
-    @SuppressLint("NotifyDataSetChanged")
+    @SuppressLint("NotifyDataSetChanged", "RestrictedApi")
     private val errorMessageObserver = Observer<String> {
         binding.swipeRefresh.isRefreshing = false
-        if (it == getString(R.string.unauthorised)) {
-            findNavController().navigate(R.id.PINCodeScreen)
-        }
-        snackBar(it)
         if (taskItemList.isEmpty()) {
             taskItemListAdapter.notifyDataSetChanged()
             binding.llEmptyBackground.visible()
         } else {
             binding.llEmptyBackground.gone()
         }
+
+        val snackbar = Snackbar.make(binding.progress, "", Snackbar.LENGTH_SHORT)
+        val layoutInflater = layoutInflater.inflate(R.layout.result_snack_bar, null)
+        snackbar.view.setBackgroundColor(Color.TRANSPARENT)
+        val snackbarLayout = snackbar.view as SnackbarLayout
+        snackbarLayout.setPadding(0,0,0,0)
+        val snackIcon = layoutInflater.findViewById<ImageView>(R.id.snackIcon)
+        val snackText = layoutInflater.findViewById<MaterialTextView>(R.id.snackText)
+        snackIcon.setBackgroundResource(R.drawable.success_icon)
+        if (it == getString(R.string.unauthorised)) {
+            snackText.text = it
+            findNavController().navigate(R.id.PINCodeScreen)
+        }
+        snackText.text = it
     }
 
     private val progressObserver = Observer<Boolean> {
@@ -605,7 +641,9 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                     if (ScanConst.INTENT_USERMSG == intent.action) {
                         mScanner!!.aDecodeGetResult(mDecodeResult!!.recycle())
                         if (getString(R.string.read_fail) != mDecodeResult.toString() && start) {
-                            viewModel2.checkKMFromServer(mDecodeResult.toString(), navArg.taskInfo.id)
+                            val dataMatrix =
+                                mDecodeResult.toString().replace(29.toChar().toString(), "\u0001D")
+                            viewModel2.checkKMFromServer(dataMatrix, navArg.taskInfo.id)
                         }
                     } else if (ScanConst.INTENT_EVENT == intent.action) {
                         val result =
