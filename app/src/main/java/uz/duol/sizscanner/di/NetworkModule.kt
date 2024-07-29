@@ -48,9 +48,9 @@ class NetworkModule {
         @ApplicationContext context: Context,
         authAuthenticator: AuthAuthenticator,
         appSharedPreference: AppSharedPreference
-    ) = OkHttpClient().newBuilder().readTimeout(15, TimeUnit.SECONDS)
-        .connectTimeout(15, TimeUnit.SECONDS).callTimeout(15, TimeUnit.SECONDS)
-        .writeTimeout(15, TimeUnit.SECONDS)
+    ) = OkHttpClient().newBuilder().readTimeout(5, TimeUnit.MINUTES)
+        .connectTimeout(5, TimeUnit.MINUTES).callTimeout(5, TimeUnit.MINUTES)
+        .writeTimeout(5, TimeUnit.MINUTES)
         .addInterceptor(tokenInterceptor(appSharedPreference))
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
         .addInterceptor(ChuckerInterceptor.Builder(context).build())
