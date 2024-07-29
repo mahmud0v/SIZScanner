@@ -9,10 +9,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import uz.duol.sizscanner.R
-import uz.duol.sizscanner.data.remote.response.CheckKMResponse
 import uz.duol.sizscanner.data.repository.app.AppRepository
 import uz.duol.sizscanner.data.repository.db.AppDatabaseRepository
-import uz.duol.sizscanner.data.sharedpreference.AppSharedPreference
 import uz.duol.sizscanner.domain.usecase.CheckKMUsaCase
 import uz.duol.sizscanner.utils.isConnected
 import javax.inject.Inject
@@ -35,7 +33,7 @@ class CheckKMUsaCaseImpl @Inject constructor(
                         400 -> emit(Result.failure(Exception(context.getString(R.string.not_found))))
                         401 -> emit(Result.failure(Exception(context.getString(R.string.unauthorised))))
                         404 -> emit(Result.failure(Exception(context.getString(R.string.not_found))))
-                        505 -> emit(Result.failure(Exception("Duplicate km")))
+                        505 -> emit(Result.failure(Exception(context.getString(R.string.duplicate_product))))
                         500-> emit(Result.failure(Exception(context.getString(R.string.server_error))))
                         else -> emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
                     }

@@ -59,5 +59,6 @@
     <string name="log_out_message">Вы действительно хотите выйти?</string>
     <string name="user_conflict">Для входа в систему ранее вошедший в систему пользователь должен выйти из системы.</string>
     <string name="new_status">Новый</string>
+    <string name="duplicate_product">Пересканированный продукт</string>
 
 </resources>
