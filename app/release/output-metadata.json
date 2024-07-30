@@ -11,9 +11,9 @@
       "type": "SINGLE",
       "filters": [],
       "attributes": [],
-      "versionCode": 3,
-      "versionName": "1.1.1",
-      "outputFile": "Акфа ТЗД-1.1.1-release.apk"
+      "versionCode": 4,
+      "versionName": "1.1.2",
+      "outputFile": "Акфа ТЗД-1.1.2-release.apk"
     }
   ],
   "elementType": "File"

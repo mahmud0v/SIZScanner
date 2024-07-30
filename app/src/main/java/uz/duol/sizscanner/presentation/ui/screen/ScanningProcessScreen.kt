@@ -254,13 +254,11 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
     private val waitingKMForInsertObserver = Observer<WaitingGtinInfo?> {
         try {
-            Log.d("QQQQ", "differenceKM: ${it?.differenceKM}  ,  gtinKMCountNotVerified: ${it?.gtinKMCountNotVerified} ")
-            if (it?.differenceKM!=0 && it?.differenceKM!! > it!!.gtinKMCountNotVerified!!){
-                val gtin = if(it.insertKM?.contains(29.toChar()) == true){
-                    val newKM = it.insertKM?.replace(29.toChar().toString(), "")
+                val gtin = if(it?.insertKM?.contains(29.toChar()) == true){
+                    val newKM = it?.insertKM?.replace(29.toChar().toString(), "")
                     newKM?.substring(2, 16)
                 } else {
-                    it.insertKM?.substring(2,16)
+                    it?.insertKM?.substring(2,16)
                 }
                 viewModel.insertKMDB(
                     KMModel(
@@ -270,9 +268,11 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                         gtin = gtin
                     )
                 )
-            } else {
-                snackBar(getString(R.string.limit_scanner_km, it.gtin))
-            }
+
+
+//            else {
+//                snackBar(getString(R.string.limit_scanner_km, it.gtin))
+//            }
 
         } catch (e: Exception) {
             snackBar(getString(R.string.unknown_error))
