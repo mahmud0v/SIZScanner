@@ -49,7 +49,7 @@ android {
 
 
     /**
-     *  Key Store path      ->    appkeystore/TZDKeyStore.jks
+     *  Key Store path      ->    appkeystore/TZDKeyStore
      *  Key Store Password  ->    AKFATZD
      *  Key alias           ->    upload
      *  Key Password        ->    AKFATZD
