@@ -1,0 +1,20 @@
+{
+  "version": 3,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "uz.duol.sizscanner",
+  "variantName": "release",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 5,
+      "versionName": "1.2",
+      "outputFile": "Акфа ТЗД-1.2-release.apk"
+    }
+  ],
+  "elementType": "File"
+}
