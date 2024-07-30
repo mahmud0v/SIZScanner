@@ -35,13 +35,11 @@ class CheckPinUseCaseImpl @Inject constructor(
                             sharedPreference.refreshToken = it
                         }
                         emit(Result.success(response.body()!!.obj))
-                        Log.d("DDDD", "checkPin: ${response.body()?.status}")
                     }
                     401 -> emit(Result.failure(Exception(context.getString(R.string.unauthorised))))
                     404 -> emit(Result.failure(Exception(context.getString(R.string.not_found))))
 
                     409 -> {
-                        Log.d("DDDD", "checkPin: ${response.body()?.status}")
                         emit(Result.failure(Exception((response.body()?.msg?:(context.getString(R.string.user_conflict))))))
                     }
 

@@ -25,7 +25,6 @@ class CheckKMUsaCaseImpl @Inject constructor(
         return flow {
                 if (isConnected()) {
                     val response = appRepository.checkKMFromServer(km, transactionId)
-                    Log.d("WWWW", "code: ${response.code()}")
                     when (response.code()) {
                         in 200..209 -> {
                             emit(Result.success(Unit))
@@ -42,7 +41,6 @@ class CheckKMUsaCaseImpl @Inject constructor(
                 }
 
         }.catch {
-            Log.d("WWWW", "checkKMFromServer: ${it.message}")
             emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
         }.flowOn(Dispatchers.IO)
 

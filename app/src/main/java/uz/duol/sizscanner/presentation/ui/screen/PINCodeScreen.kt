@@ -123,7 +123,6 @@ class PINCodeScreen : Fragment(R.layout.pin_code_screen) {
     private fun checkAdd() {
         if (pinText.length == 6) {
             val deviceId = Secure.getString(requireContext().contentResolver, Secure.ANDROID_ID)
-            Log.d("DDDD", "deviceId: $deviceId")
             viewModel.checkPin(pinText, deviceId)
             binding.eraseBtn.disable()
         }else {

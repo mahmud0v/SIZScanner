@@ -51,7 +51,7 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
         viewModel.newTaskList(page++, pageSize)
 
         taskAdapter.setLoader {
-            if (page <= maxPage) // check maxPage - 1
+            if (page <= maxPage) //
                 viewModel.newTaskList(page++, pageSize)
         }
 

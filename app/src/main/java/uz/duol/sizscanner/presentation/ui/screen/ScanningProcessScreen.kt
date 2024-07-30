@@ -73,12 +73,10 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         page = 0
         taskItemList.clear()
         viewModel.taskItemList(navArg.taskInfo.id, page++, pageSize)
-        Log.d("LLLL", "onViewCreated: true")
 
         taskItemListAdapter.setLoader {
 
             if (page < maxPage){
-                Log.d("LLLL", "setLoader: true")
                 viewModel.taskItemList(navArg.taskInfo.id, page++, pageSize)
 
             }
@@ -243,18 +241,19 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
     @SuppressLint("NotifyDataSetChanged")
     private val taskItemListObserver = Observer<List<TaskItemResponse>?> {
         binding.swipeRefresh.isRefreshing = false
-        if (it != null){
+        it?.let {
             taskItemList.addAll(it)
             taskItemListAdapter.differ.submitList(taskItemList)
             taskItemListAdapter.notifyDataSetChanged()
-            Log.d("LLLL", "size: ${ taskItemListAdapter.differ.currentList.size} ")
             if (taskItemList.isNotEmpty()) {
                 binding.llEmptyBackground.gone()
             } else {
                 binding.llEmptyBackground.visible()
             }
         }
+
     }
+
 
 
     private val pageSizeObserver = Observer<Int> {
