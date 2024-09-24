@@ -21,8 +21,8 @@ android {
         targetSdk 34
         versionCode 5
         versionName "1.2"
-        buildConfigField('String','BASE_URL','"http://akfa.onlinesavdo.com:7778/"')
-        setProperty("archivesBaseName", "Акфа ТЗД-$versionName")
+        buildConfigField('String','BASE_URL','"http://192.168.7.25:8080/"')
+        setProperty("archivesBaseName", "Акфа ТЗД-local(7.53)")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }

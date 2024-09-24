@@ -53,7 +53,7 @@ class NetworkModule {
         .writeTimeout(5, TimeUnit.MINUTES)
         .addInterceptor(tokenInterceptor(appSharedPreference))
         .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY))
-//        .addInterceptor(ChuckerInterceptor.Builder(context).build())
+        .addInterceptor(ChuckerInterceptor.Builder(context).build())
         .authenticator(authAuthenticator)
         .build()
 

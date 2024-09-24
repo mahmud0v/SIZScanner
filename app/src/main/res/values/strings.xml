@@ -60,5 +60,7 @@
     <string name="user_conflict">Для входа в систему ранее вошедший в систему пользователь должен выйти из системы.</string>
     <string name="new_status">Новый</string>
     <string name="duplicate_product">Пересканированный продукт</string>
+    <string name="sales">Расход</string>
+    <string name="returns">Возврат</string>
 
 </resources>

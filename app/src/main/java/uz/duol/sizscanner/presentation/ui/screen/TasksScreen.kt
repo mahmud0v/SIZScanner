@@ -9,6 +9,7 @@ import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
+import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import uz.duol.sizscanner.R
 import uz.duol.sizscanner.data.remote.response.TaskResponse
@@ -16,6 +17,7 @@ import uz.duol.sizscanner.databinding.TasksScreenBinding
 import uz.duol.sizscanner.presentation.ui.adapter.TasksListAdapter
 import uz.duol.sizscanner.presentation.viewmodel.task.NewTaskLisViewModelImpl
 import uz.duol.sizscanner.presentation.viewmodel.task.NewTaskListViewModel
+import uz.duol.sizscanner.utils.TaskType
 import uz.duol.sizscanner.utils.gone
 import uz.duol.sizscanner.utils.snackBar
 import uz.duol.sizscanner.utils.visible
@@ -25,7 +27,8 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
     private val binding by viewBinding(TasksScreenBinding::bind)
     private val viewModel: NewTaskListViewModel by viewModels<NewTaskLisViewModelImpl>()
     private val taskAdapter by lazy { TasksListAdapter() }
-    private val taskList =  ArrayList<TaskResponse>()
+    private val salesTaskList =  ArrayList<TaskResponse>()
+    private val returnTaskList =  ArrayList<TaskResponse>()
     private var page = 0
     private var pageSize = 10
     private var maxPage: Int = 1
@@ -43,11 +46,13 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
 
         binding.toolbar.setNavigationOnClickListener {
             findNavController().popBackStack()
+            salesTaskList.clear()
+            returnTaskList.clear()
         }
 
 
         page = 0
-        taskList.clear()
+        salesTaskList.clear()
         viewModel.newTaskList(page++, pageSize)
 
         taskAdapter.setLoader {
@@ -57,10 +62,29 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
 
         binding.swipeRefresh.setOnRefreshListener {
             page = 0
-            taskList.clear()
+            salesTaskList.clear()
             viewModel.newTaskList(page++, pageSize)
 
         }
+
+        binding.tabLayoutInvoice.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabSelected(p0: TabLayout.Tab?) {
+                when (p0?.position) {
+                    0 -> taskAdapter.differ.submitList(salesTaskList)
+                    1 -> taskAdapter.differ.submitList(returnTaskList)
+                }
+
+            }
+
+            override fun onTabUnselected(p0: TabLayout.Tab?) {
+
+            }
+
+            override fun onTabReselected(p0: TabLayout.Tab?) {
+
+            }
+
+        })
 
         viewModel.newTaskListLiveData.observe(viewLifecycleOwner, newTaskListObserver)
         viewModel.pageSizeLiveData.observe(viewLifecycleOwner, pageSizeObserver)
@@ -74,12 +98,18 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
     private val newTaskListObserver = Observer<List<TaskResponse>?>{
         binding.swipeRefresh.isRefreshing = false
         it?.let {
-            taskList.addAll(it)
-            taskAdapter.differ.submitList(taskList)
+            it.map { taskResponse ->
+                if (taskResponse.type == TaskType.DEBIT_NOTE) {
+                    returnTaskList.add(taskResponse)
+                } else {
+                    salesTaskList.add(taskResponse)
+                }
+            }
+            taskAdapter.differ.submitList(salesTaskList)
             taskAdapter.notifyDataSetChanged()
         }
 
-        if (taskList.isEmpty() && taskAdapter.differ.currentList.isEmpty()) {
+        if (salesTaskList.isEmpty() && taskAdapter.differ.currentList.isEmpty()) {
             binding.llEmptyBackground.visible()
         } else {
             binding.llEmptyBackground.gone()
@@ -93,7 +123,7 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
             findNavController().navigate(R.id.PINCodeScreen)
         }
         snackBar(it)
-        if (taskList.isEmpty()) {
+        if (salesTaskList.isEmpty()) {
             taskAdapter.notifyDataSetChanged()
             binding.llEmptyBackground.visible()
         } else {
@@ -113,6 +143,8 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
             binding.progress.gone()
         }
     }
+
+
 
 
 }
