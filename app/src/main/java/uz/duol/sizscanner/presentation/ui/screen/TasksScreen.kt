@@ -2,6 +2,7 @@ package uz.duol.sizscanner.presentation.ui.screen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -27,8 +28,8 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
     private val binding by viewBinding(TasksScreenBinding::bind)
     private val viewModel: NewTaskListViewModel by viewModels<NewTaskLisViewModelImpl>()
     private val taskAdapter by lazy { TasksListAdapter() }
-    private val salesTaskList =  ArrayList<TaskResponse>()
-    private val returnTaskList =  ArrayList<TaskResponse>()
+    private val salesTaskList = ArrayList<TaskResponse>()
+    private val returnTaskList = ArrayList<TaskResponse>()
     private var page = 0
     private var pageSize = 10
     private var maxPage: Int = 1
@@ -53,6 +54,7 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
 
         page = 0
         salesTaskList.clear()
+        returnTaskList.clear()
         viewModel.newTaskList(page++, pageSize)
 
         taskAdapter.setLoader {
@@ -63,16 +65,33 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
         binding.swipeRefresh.setOnRefreshListener {
             page = 0
             salesTaskList.clear()
+            returnTaskList.clear()
             viewModel.newTaskList(page++, pageSize)
 
         }
 
-        binding.tabLayoutInvoice.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        binding.tabLayoutInvoice.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(p0: TabLayout.Tab?) {
                 when (p0?.position) {
-                    0 -> taskAdapter.differ.submitList(salesTaskList)
-                    1 -> taskAdapter.differ.submitList(returnTaskList)
+                    0 -> {
+                        taskAdapter.differ.submitList(salesTaskList)
+                        if (salesTaskList.isEmpty()){
+                            binding.llEmptyBackground.visible()
+                        }else {
+                            binding.llEmptyBackground.gone()
+                        }
+                    }
+                    1 -> {
+                        taskAdapter.differ.submitList(returnTaskList)
+                        if (returnTaskList.isEmpty()){
+                            binding.llEmptyBackground.visible()
+                        }else {
+                            binding.llEmptyBackground.gone()
+                        }
+                    }
                 }
+
+                taskAdapter.notifyDataSetChanged()
 
             }
 
@@ -95,8 +114,7 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    private val newTaskListObserver = Observer<List<TaskResponse>?>{
-        binding.swipeRefresh.isRefreshing = false
+    private val newTaskListObserver = Observer<List<TaskResponse>?> {
         it?.let {
             it.map { taskResponse ->
                 if (taskResponse.type == TaskType.DEBIT_NOTE) {
@@ -105,15 +123,28 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
                     salesTaskList.add(taskResponse)
                 }
             }
+        }
+        if (binding.tabLayoutInvoice.selectedTabPosition == 0){
             taskAdapter.differ.submitList(salesTaskList)
             taskAdapter.notifyDataSetChanged()
+            if (salesTaskList.isEmpty()){
+                binding.llEmptyBackground.visible()
+            }else {
+                binding.llEmptyBackground.gone()
+            }
+        }else {
+            taskAdapter.differ.submitList(returnTaskList)
+            taskAdapter.notifyDataSetChanged()
+            if (returnTaskList.isEmpty()){
+                binding.llEmptyBackground.visible()
+            }else {
+                binding.llEmptyBackground.gone()
+            }
         }
 
-        if (salesTaskList.isEmpty() && taskAdapter.differ.currentList.isEmpty()) {
-            binding.llEmptyBackground.visible()
-        } else {
-            binding.llEmptyBackground.gone()
-        }
+        binding.swipeRefresh.isRefreshing = false
+
+
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -123,12 +154,22 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
             findNavController().navigate(R.id.PINCodeScreen)
         }
         snackBar(it)
-        if (salesTaskList.isEmpty()) {
-            taskAdapter.notifyDataSetChanged()
-            binding.llEmptyBackground.visible()
+        if (binding.tabLayoutInvoice.selectedTabPosition == 0) {
+            if (salesTaskList.isEmpty()) {
+                taskAdapter.notifyDataSetChanged()
+                binding.llEmptyBackground.visible()
+            } else {
+                binding.llEmptyBackground.gone()
+            }
         } else {
-            binding.llEmptyBackground.gone()
+            if (returnTaskList.isEmpty()) {
+                taskAdapter.notifyDataSetChanged()
+                binding.llEmptyBackground.visible()
+            } else {
+                binding.llEmptyBackground.gone()
+            }
         }
+
     }
 
     private val pageSizeObserver = Observer<Int> {
@@ -136,15 +177,13 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
     }
 
 
-    private val progressObserver = Observer<Boolean>{
-        if (it){
+    private val progressObserver = Observer<Boolean> {
+        if (it) {
             binding.progress.visible()
-        }else {
+        } else {
             binding.progress.gone()
         }
     }
-
-
 
 
 }

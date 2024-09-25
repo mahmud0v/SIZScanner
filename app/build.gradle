@@ -22,7 +22,7 @@ android {
         versionCode 5
         versionName "1.2"
         buildConfigField('String','BASE_URL','"http://192.168.7.25:8080/"')
-        setProperty("archivesBaseName", "Акфа ТЗД-local(7.53)")
+        setProperty("archivesBaseName", "Акфа ТЗД-local(7.25)")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
     }
