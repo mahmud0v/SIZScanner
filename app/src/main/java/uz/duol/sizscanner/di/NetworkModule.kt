@@ -2,7 +2,6 @@ package uz.duol.sizscanner.di
 
 import android.content.Context
 import android.util.Log
-import com.chuckerteam.chucker.api.ChuckerInterceptor
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

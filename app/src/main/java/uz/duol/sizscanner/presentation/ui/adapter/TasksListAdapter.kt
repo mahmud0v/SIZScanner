@@ -8,12 +8,9 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import uz.duol.sizscanner.R
-import uz.duol.sizscanner.data.model.TaskInfo
 import uz.duol.sizscanner.data.remote.response.TaskResponse
-import uz.duol.sizscanner.databinding.TaskItemBinding
 import uz.duol.sizscanner.databinding.TasksItemBinding
 import uz.duol.sizscanner.utils.TaskStatus
-import uz.duol.sizscanner.utils.dateFormat
 import uz.duol.sizscanner.utils.gone
 import uz.duol.sizscanner.utils.visible
 

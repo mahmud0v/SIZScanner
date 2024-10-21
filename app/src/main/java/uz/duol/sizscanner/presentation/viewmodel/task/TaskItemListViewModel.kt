@@ -1,10 +1,6 @@
 package uz.duol.sizscanner.presentation.viewmodel.task
 
 import androidx.lifecycle.LiveData
-import uz.duol.sizscanner.data.database.entity.GtinEntity
-import uz.duol.sizscanner.data.database.entity.KMModel
-import uz.duol.sizscanner.data.model.ExistsKMInfo
-import uz.duol.sizscanner.data.model.InsertKMInfo
 import uz.duol.sizscanner.data.remote.response.TaskItemResponse
 
 interface TaskItemListViewModel {

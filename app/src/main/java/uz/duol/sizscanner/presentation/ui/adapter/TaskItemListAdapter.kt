@@ -1,16 +1,11 @@
 package uz.duol.sizscanner.presentation.ui.adapter
 
 import android.annotation.SuppressLint
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import uz.duol.sizscanner.R
-import uz.duol.sizscanner.data.model.TaskItemInfo
 import uz.duol.sizscanner.data.remote.response.TaskItemResponse
 import uz.duol.sizscanner.databinding.TaskItemBinding
 
