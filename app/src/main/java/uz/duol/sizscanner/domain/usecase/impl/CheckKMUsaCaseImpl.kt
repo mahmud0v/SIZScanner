@@ -32,8 +32,9 @@ class CheckKMUsaCaseImpl @Inject constructor(
                         400 -> emit(Result.failure(Exception(context.getString(R.string.not_found))))
                         401 -> emit(Result.failure(Exception(context.getString(R.string.unauthorised))))
                         404 -> emit(Result.failure(Exception(context.getString(R.string.not_found))))
-                        505 -> emit(Result.failure(Exception(context.getString(R.string.duplicate_product))))
                         500-> emit(Result.failure(Exception(context.getString(R.string.server_error))))
+                        505 -> emit(Result.failure(Exception(context.getString(R.string.duplicate_product))))
+                        506 -> emit(Result.failure(Exception(context.getString(R.string.excess_km))))
                         else -> emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
                     }
                 } else {

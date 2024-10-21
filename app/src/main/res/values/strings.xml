@@ -40,7 +40,8 @@
     <string name="zero_number">0</string>
     <string name="no_result">Нет результат</string>
     <string name="unauthorised">Ошибка авторизации</string>
-    <string name="not_found">Не найдено</string>
+    <string name="not_found">Отсканированная недействительная маркировка</string>
+    <string name="excess_km">Лишняя маркировка устранена</string>
     <string name="server_error">Ошибка сервера</string>
     <string name="unknown_error">Что-то пошло не так</string>
     <string name="error_internet">Проблема с интернетом</string>
@@ -60,5 +61,7 @@
     <string name="user_conflict">Для входа в систему ранее вошедший в систему пользователь должен выйти из системы.</string>
     <string name="new_status">Новый</string>
     <string name="duplicate_product">Пересканированный продукт</string>
+    <string name="sales">Расход</string>
+    <string name="returns">Возврат</string>
 
 </resources>
