@@ -2,6 +2,9 @@ package uz.duol.sizscanner.data.repository.app
 
 import retrofit2.Response
 import uz.duol.sizscanner.data.remote.ApiService
+import uz.duol.sizscanner.data.remote.request.CheckKMRequest
+import uz.duol.sizscanner.data.remote.request.CheckTaskStatus
+import uz.duol.sizscanner.data.remote.request.LoginRequest
 import uz.duol.sizscanner.data.remote.response.ApiResponse
 import uz.duol.sizscanner.data.remote.response.CheckKMResponse
 import uz.duol.sizscanner.data.remote.response.CheckPinResponse
@@ -15,10 +18,10 @@ class AppRepositoryImpl @Inject constructor(
 ) : AppRepository {
 
 
-    override suspend fun checkPin(pin: String): Response<ApiResponse<CheckPinResponse>> {
+    override suspend fun checkPin(pin: String, deviceId: String?): Response<ApiResponse<CheckPinResponse>> {
         return apiService.checkPin(
-            "osm/mobile-user/login",
-            pin
+            "osm/mobile-user/auth/login",
+            LoginRequest(pin, deviceId)
         )
     }
 
@@ -46,18 +49,23 @@ class AppRepositoryImpl @Inject constructor(
         )
     }
 
-    override suspend fun checkKMFromServer(kmList: List<String?>, transactionId:Int?): Response<ApiResponse<CheckKMResponse>> {
+    override suspend fun checkKMFromServer(km: String?, transactionId: Int?): Response<ApiResponse<CheckKMResponse>> {
         return apiService.checkKMFromServer(
             "osm/mobile-user/sync-status",
-            kmList,
-            transactionId
+            CheckKMRequest(km, transactionId)
         )
     }
 
-    override suspend fun taskState(transactionId: Int?): Response<ApiResponse<Boolean>> {
-        return apiService.taskState(
+    override suspend fun checkTaskStatus(transactionId: Int?): Response<ApiResponse<Boolean>> {
+        return apiService.checkTaskStatus(
             "osm/mobile-user/sync-closed",
-            transactionId
+            CheckTaskStatus(transactionId)
+        )
+    }
+
+    override suspend fun logout(): Response<ApiResponse<Unit>> {
+        return apiService.logout(
+            "osm/mobile-user/auth/logout"
         )
     }
 

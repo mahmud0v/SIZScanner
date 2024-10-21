@@ -7,6 +7,22 @@
     android:layout_height="match_parent">
 
 
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/logOut"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/logout_back"
+        android:src="@drawable/logout"
+        android:paddingTop="3dp"
+        android:paddingBottom="3dp"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+
+        />
 
     <com.google.android.material.appbar.MaterialToolbar
         android:layout_width="wrap_content"
@@ -25,7 +41,7 @@
         android:src="@drawable/user"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="50dp"
         android:layout_marginLeft="20dp"
         android:id="@+id/userIcon"
         />

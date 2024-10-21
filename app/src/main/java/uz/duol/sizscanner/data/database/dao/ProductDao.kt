@@ -11,7 +11,7 @@ import uz.duol.sizscanner.data.database.entity.KMModel
 interface ProductDao {
 
    @Query("SELECT km FROM KMModel WHERE km_status_server = 'SCANNED_NOT_VERIFIED' AND task_id =:taskId")
-   suspend fun failedServerKMList(taskId: Int?): List<String?>
+   suspend fun scannedNotVerifiedKMList(taskId: Int?): List<String?>
 
    @Insert(onConflict = OnConflictStrategy.REPLACE)
    suspend fun insertKM(kmModel: KMModel):Long

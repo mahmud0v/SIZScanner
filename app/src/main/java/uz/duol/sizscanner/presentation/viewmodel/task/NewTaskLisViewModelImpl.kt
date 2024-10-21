@@ -8,18 +8,21 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import uz.duol.sizscanner.data.remote.response.TaskResponse
+import uz.duol.sizscanner.domain.usecase.LogoutUseCase
 import uz.duol.sizscanner.domain.usecase.NewTaskListUseCase
 import javax.inject.Inject
 
 @HiltViewModel
 class NewTaskLisViewModelImpl @Inject constructor(
-  private val newTaskListUseCase: NewTaskListUseCase
+  private val newTaskListUseCase: NewTaskListUseCase,
+    private val logoutUseCase: LogoutUseCase
 ) : NewTaskListViewModel, ViewModel() {
     override val newTaskListLiveData = MutableLiveData<List<TaskResponse>?>()
     override val errorMessageLiveData = MutableLiveData<String>()
     override val progressLoadingLiveData = MutableLiveData<Boolean>()
     override val pageSizeLiveData = MutableLiveData<Int>()
     override val totalSizeLiveData = MutableLiveData<Int>()
+    override val logoutLiveData = MutableLiveData<Unit>()
 
 
     private var maxPage: Int = 0
@@ -43,5 +46,17 @@ class NewTaskLisViewModelImpl @Inject constructor(
             }
             progressLoadingLiveData.value = false
         }.launchIn(viewModelScope)
+    }
+
+    override fun logout() {
+       logoutUseCase.logout().onEach {
+           it.onSuccess {
+               logoutLiveData.value = it
+           }
+
+           it.onFailure {
+               errorMessageLiveData.value = it.message
+           }
+       }.launchIn(viewModelScope)
     }
 }

@@ -1,43 +1,39 @@
 package uz.duol.sizscanner.domain.usecase.impl
 
 import android.content.Context
+import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import uz.duol.sizscanner.R
-import uz.duol.sizscanner.data.remote.response.CheckKMResponse
 import uz.duol.sizscanner.data.repository.app.AppRepository
 import uz.duol.sizscanner.data.repository.db.AppDatabaseRepository
-import uz.duol.sizscanner.data.sharedpreference.AppSharedPreference
 import uz.duol.sizscanner.domain.usecase.CheckKMUsaCase
 import uz.duol.sizscanner.utils.isConnected
 import javax.inject.Inject
 
 class CheckKMUsaCaseImpl @Inject constructor(
     private val appRepository: AppRepository,
-    private val sharedPreference: AppSharedPreference,
     private val appDatabaseRepository: AppDatabaseRepository,
     @ApplicationContext val context: Context
 ) : CheckKMUsaCase {
 
-    override fun checkKMFromServer(kmList: List<String?>, transactionId:Int?): Flow<Result<CheckKMResponse?>> {
+    override fun checkKMFromServer(km: String?, transactionId:Int?): Flow<Result<Unit>> {
         return flow {
                 if (isConnected()) {
-                    val response = appRepository.checkKMFromServer(kmList, transactionId)
-                    when (response.body()?.status) {
+                    val response = appRepository.checkKMFromServer(km, transactionId)
+                    when (response.code()) {
                         in 200..209 -> {
-                            response.body()?.newToken?.let {
-                                sharedPreference.token = it
-                            }
-                            emit(Result.success(response.body()!!.obj))
+                            emit(Result.success(Unit))
                         }
+                        400 -> emit(Result.failure(Exception(context.getString(R.string.not_found))))
                         401 -> emit(Result.failure(Exception(context.getString(R.string.unauthorised))))
                         404 -> emit(Result.failure(Exception(context.getString(R.string.not_found))))
-                        in 500..599 -> emit(Result.failure(Exception(context.getString(R.string.server_error))))
+                        505 -> emit(Result.failure(Exception(context.getString(R.string.duplicate_product))))
+                        500-> emit(Result.failure(Exception(context.getString(R.string.server_error))))
                         else -> emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
                     }
                 } else {

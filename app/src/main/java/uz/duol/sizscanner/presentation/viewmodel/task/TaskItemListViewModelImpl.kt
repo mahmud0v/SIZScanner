@@ -1,6 +1,5 @@
 package uz.duol.sizscanner.presentation.viewmodel.task
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,13 +7,8 @@ import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import uz.duol.sizscanner.data.database.entity.GtinEntity
-import uz.duol.sizscanner.data.database.entity.KMModel
-import uz.duol.sizscanner.data.model.ExistsKMInfo
-import uz.duol.sizscanner.data.model.InsertKMInfo
 import uz.duol.sizscanner.data.remote.response.TaskItemResponse
-import uz.duol.sizscanner.domain.usecase.GtinUseCase
-import uz.duol.sizscanner.domain.usecase.KMSaveDBUseCase
+import uz.duol.sizscanner.domain.usecase.CheckKMUsaCase
 import uz.duol.sizscanner.domain.usecase.TaskItemListUseCase
 import uz.duol.sizscanner.domain.usecase.TaskStatusUseCase
 import javax.inject.Inject
@@ -22,26 +16,20 @@ import javax.inject.Inject
 @HiltViewModel
 class TaskItemListViewModelImpl @Inject constructor(
     private val taskItemListUseCase: TaskItemListUseCase,
-    private val kmSaveDBUseCase: KMSaveDBUseCase,
     private val taskStatusUseCase: TaskStatusUseCase,
-    private val gtinUseCase: GtinUseCase
+    private val checkKMUsaCase: CheckKMUsaCase
 ) : TaskItemListViewModel, ViewModel() {
     override val taskItemListLiveData = MutableLiveData<List<TaskItemResponse>?>()
     override val errorMessageLiveData = MutableLiveData<String>()
     override val progressLoadingLiveData = MutableLiveData<Boolean>()
     override val pageSizeLiveData = MutableLiveData<Int>()
-    override val addWaitingKMSaveDB = MutableLiveData<InsertKMInfo>()
     override val taskStatusLiveData = MutableLiveData<String?>()
-    override val failedServerKMListLiveData = MutableLiveData<List<String?>?>()
-    override val errorMessageFailedServerKMListLiveData = MutableLiveData<String>()
     override val taskMainStatusLiveData = MutableLiveData<Boolean?>()
     override val errorTaskMainStatusLiveData = MutableLiveData<String>()
-    override val existGtinLiveData = MutableLiveData<TaskItemResponse?>()
-    override val editGtinTotalSoldKMLiveData = MutableLiveData<Unit>()
-    override val getAllGtinDBLiveData = MutableLiveData<List<GtinEntity>>()
-    override val editWaitingKMLiveData = MutableLiveData<Int>()
-    override val existKMLiveData = MutableLiveData<ExistsKMInfo>()
-    override val progressLoading2LiveData = MutableLiveData<Boolean>()
+    override val successCheckKMLiveData = MutableLiveData<Unit>()
+    override val errorCheckKMLiveData = MutableLiveData<String>()
+    override val progressLiveData = MutableLiveData<Boolean>()
+
 
 
     private var maxPage: Int = 0
@@ -69,38 +57,10 @@ class TaskItemListViewModelImpl @Inject constructor(
 
     }
 
-    override fun insertKMDB(kmModel: KMModel) {
-        kmSaveDBUseCase.insertKM(kmModel).onEach {
 
-            it.onSuccess {
-                addWaitingKMSaveDB.value = InsertKMInfo(it, kmModel.km)
-            }
 
-            it.onFailure {
-                errorMessageLiveData.value = it.message
-            }
-
-        }.launchIn(viewModelScope)
-    }
-
-    override fun failedServerKMList(taskId: Int?) {
-        progressLoading2LiveData.value = false
-
-        kmSaveDBUseCase.failedServerKMList(taskId).onEach {
-            progressLoading2LiveData.value = true
-            it.onSuccess {
-                failedServerKMListLiveData.value = it
-            }
-
-            it.onFailure {
-                errorMessageFailedServerKMListLiveData.value = it.message
-            }
-
-        }.launchIn(viewModelScope)
-    }
-
-    override fun taskStatus(transactionId: Int?) {
-        taskStatusUseCase.taskStatus(transactionId).onEach {
+    override fun checkTaskStatus(transactionId: Int?) {
+        taskStatusUseCase.checkTaskStatus(transactionId).onEach {
             it.onSuccess {
                 taskMainStatusLiveData.value = it
             }
@@ -112,60 +72,19 @@ class TaskItemListViewModelImpl @Inject constructor(
         }.launchIn(viewModelScope)
     }
 
-    override fun existGtin(gtin: String?, taskId: Int?, taskItem: TaskItemResponse?) {
-        gtinUseCase.existsGtin(gtin, taskId).onEach {
-            it.onSuccess {
-                taskItem?.existDB = it
-                existGtinLiveData.value = taskItem
-            }
+    override fun checkKMFromServer(km: String?, transactionId: Int?) {
+        progressLiveData.value = true
+        checkKMUsaCase.checkKMFromServer(km, transactionId).onEach {
 
-            it.onFailure { }
-        }.launchIn(viewModelScope)
-    }
-
-    override fun editGtinTotalSoldKM(id: Int?, totalKM: Int?, soldKM: Int?) {
-        gtinUseCase.editGtinTotalSoldKM(id, totalKM, soldKM).onEach {
             it.onSuccess {
-                editGtinTotalSoldKMLiveData.value = Unit
+                successCheckKMLiveData.value = it
             }
 
             it.onFailure {
+                errorCheckKMLiveData.value = it.message
 
             }
-        }.launchIn(viewModelScope)
-    }
-
-    override fun getAllGtinDB(taskId: Int?) {
-        gtinUseCase.getAllGtinDB(taskId).onEach {
-            it.onSuccess {
-                getAllGtinDBLiveData.value = it
-            }
-
-            it.onFailure {
-
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    override fun editWaitingKM(waitingKM: Int?, gtin: String?, taskId: Int?) {
-        gtinUseCase.editWaitingKM(waitingKM, gtin, taskId).onEach {
-            it.onSuccess {
-                editWaitingKMLiveData.value = it
-            }
-
-            it.onFailure {
-
-            }
-        }.launchIn(viewModelScope)
-    }
-
-    override fun existKM(km: String?) {
-        gtinUseCase.existsKM(km).onEach {
-            it.onSuccess {
-                existKMLiveData.value = ExistsKMInfo(km,it)
-            }
-
-            it.onFailure {}
+            progressLiveData.value = false
         }.launchIn(viewModelScope)
     }
 

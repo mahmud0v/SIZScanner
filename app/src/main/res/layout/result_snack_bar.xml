@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingLeft="8dp"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
+    android:id="@+id/result_snack_layout"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:background="@drawable/snack_success_back"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        tools:src="@drawable/success_icon"
+        android:id="@+id/snackIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
+
+    <com.google.android.material.textview.MaterialTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/snackIcon"
+        app:layout_constraintTop_toTopOf="@id/snackIcon"
+        app:layout_constraintBottom_toBottomOf="@id/snackIcon"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginLeft="56dp"
+        android:layout_marginRight="24dp"
+        android:fontFamily="@font/sf_pro_display"
+        android:textSize="16sp"
+        android:id="@+id/snackText"
+        tools:text="Qandaydur xatolik sodir bo'ldi deb akfa savdodan aytildi"
+        android:textFontWeight="590"
+        android:textColor="@color/text_color"
+        />
+
+
+
+
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

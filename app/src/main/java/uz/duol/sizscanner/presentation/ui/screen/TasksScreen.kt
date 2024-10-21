@@ -2,7 +2,6 @@ package uz.duol.sizscanner.presentation.ui.screen
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -12,14 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import by.kirich1409.viewbindingdelegate.viewBinding
 import dagger.hilt.android.AndroidEntryPoint
 import uz.duol.sizscanner.R
-import uz.duol.sizscanner.data.model.TaskInfo
 import uz.duol.sizscanner.data.remote.response.TaskResponse
 import uz.duol.sizscanner.databinding.TasksScreenBinding
 import uz.duol.sizscanner.presentation.ui.adapter.TasksListAdapter
 import uz.duol.sizscanner.presentation.viewmodel.task.NewTaskLisViewModelImpl
 import uz.duol.sizscanner.presentation.viewmodel.task.NewTaskListViewModel
 import uz.duol.sizscanner.utils.gone
-import uz.duol.sizscanner.utils.isEnabled
 import uz.duol.sizscanner.utils.snackBar
 import uz.duol.sizscanner.utils.visible
 
@@ -54,7 +51,7 @@ class TasksScreen : Fragment(R.layout.tasks_screen) {
         viewModel.newTaskList(page++, pageSize)
 
         taskAdapter.setLoader {
-            if (page <= maxPage)
+            if (page <= maxPage) //
                 viewModel.newTaskList(page++, pageSize)
         }
 

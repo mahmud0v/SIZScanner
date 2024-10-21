@@ -23,19 +23,27 @@ class CheckPinUseCaseImpl @Inject constructor(
     @ApplicationContext val context:Context
 ): CheckPinUseCase {
 
-    override fun checkPin(pin: String): Flow<Result<CheckPinResponse?>> {
+    override fun checkPin(pin: String, deviceId: String?): Flow<Result<CheckPinResponse?>> {
         return flow {
             if (isConnected()){
-                val response = appRepository.checkPin(pin)
-                when (response.body()?.status) {
+                val response = appRepository.checkPin(pin, deviceId)
+                when (response.code()) {
                     in 200..209 -> {
-                        response.body()?.newToken?.let {
+                        response.body()?.accessToken?.let {
                             sharedPreference.token = it
+                        }
+                        response.body()?.refreshToken?.let {
+                            sharedPreference.refreshToken = it
                         }
                         emit(Result.success(response.body()!!.obj))
                     }
                     401 -> emit(Result.failure(Exception(context.getString(R.string.unauthorised))))
                     404 -> emit(Result.failure(Exception(context.getString(R.string.not_found))))
+
+                    409 -> {
+                        emit(Result.failure(Exception((response.body()?.msg?:(context.getString(R.string.user_conflict))))))
+                    }
+
                     in 500..599 -> emit(Result.failure(Exception(context.getString(R.string.server_error))))
                     else -> emit(Result.failure(Exception(context.getString(R.string.unknown_error))))
                 }

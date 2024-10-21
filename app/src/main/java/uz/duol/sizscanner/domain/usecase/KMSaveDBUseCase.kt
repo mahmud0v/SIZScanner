@@ -7,7 +7,13 @@ interface KMSaveDBUseCase {
 
     fun insertKM(kmModel: KMModel): Flow<Result<Long>>
 
-    fun failedServerKMList(taskId:Int?): Flow<Result<List<String?>?>>
+    fun scannedNotVerifiedKMList(taskId:Int?): Flow<Result<List<String?>?>>
+
+    fun kmChangeStatusScannedVerified(km:String?): Flow<Result<Unit>>
+
+    fun countNotVerifiedTaskGtinKM(gtin: String?, taskId: Int?): Flow<Result<Int?>>
+
+    fun deleteKM(km:String?): Flow<Result<Unit>>
 
     fun kmChangeStatusScannedVerified(km:String?): Flow<Result<Unit>>
 

@@ -5,7 +5,9 @@ import uz.duol.sizscanner.data.remote.response.CheckKMResponse
 
 interface CheckKMUsaCase {
 
-    fun checkKMFromServer(kmList:List<String?>, transactionId:Int?): Flow<Result<CheckKMResponse?>>
+    fun checkKMFromServer(km: String?, transactionId:Int?): Flow<Result<Unit>>
+
+    fun allTaskGtinKM(taskId: Int?, gtin: String?):Flow<Result<Int?>>
 
     fun allTaskGtinKM(taskId: Int?, gtin: String?):Flow<Result<Int?>>
 

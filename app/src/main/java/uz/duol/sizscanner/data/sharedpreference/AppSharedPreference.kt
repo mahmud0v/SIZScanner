@@ -8,4 +8,5 @@ import javax.inject.Singleton
 class AppSharedPreference(@ApplicationContext context:Context) : SharedPreference(context){
 
     var token: String by StringPreference("")
+    var refreshToken: String by StringPreference("")
 }

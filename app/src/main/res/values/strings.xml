@@ -25,7 +25,8 @@
     <string name="task_list">Список заданий</string>
     <string name="no_scanned">Не сканируется</string>
     <string name="failed_scanned">Ожидает синхронизации</string>
-    <string name="success_scanned">Успешно</string>
+    <string name="success_scanned">Товар успешно отсканирован</string>
+    <string name="fail_scanned">Произошла ошибка при сканировании продукта</string>
     <string name="enter_pin_code">Введите PIN-код</string>
     <string name="one_number">1</string>
     <string name="two_number">2</string>
@@ -53,5 +54,11 @@
     <string name="process">Процесс</string>
     <string name="closed">Закрыто</string>
     <string name="limit_scanner_km">%s отсканировал достаточное количество километров для продукта</string>
+    <string name="log_out">Выйти</string>
+    <string name="log_out_title">Выйти из система </string>
+    <string name="log_out_message">Вы действительно хотите выйти?</string>
+    <string name="user_conflict">Для входа в систему ранее вошедший в систему пользователь должен выйти из системы.</string>
+    <string name="new_status">Новый</string>
+    <string name="duplicate_product">Пересканированный продукт</string>
 
 </resources>

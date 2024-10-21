@@ -5,6 +5,6 @@ import uz.duol.sizscanner.data.remote.response.CheckPinResponse
 
 interface CheckPinUseCase {
 
-    fun checkPin(pin:String): Flow<Result<CheckPinResponse?>>
+    fun checkPin(pin:String, deviceId:String?): Flow<Result<CheckPinResponse?>>
 
 }
