@@ -40,7 +40,8 @@
     <string name="zero_number">0</string>
     <string name="no_result">Нет результат</string>
     <string name="unauthorised">Ошибка авторизации</string>
-    <string name="not_found">Не найдено</string>
+    <string name="not_found">Отсканированная недействительная маркировка</string>
+    <string name="excess_km">Лишняя маркировка устранена</string>
     <string name="server_error">Ошибка сервера</string>
     <string name="unknown_error">Что-то пошло не так</string>
     <string name="error_internet">Проблема с интернетом</string>
