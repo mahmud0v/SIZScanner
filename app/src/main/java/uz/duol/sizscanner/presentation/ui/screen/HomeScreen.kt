@@ -77,4 +77,6 @@ class HomeScreen : Fragment(R.layout.home_screen){
         findNavController().navigate(R.id.PINCodeScreen)
 
     }
+
+
 }
