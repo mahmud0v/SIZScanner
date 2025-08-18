@@ -10,7 +10,6 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -33,6 +32,8 @@ import uz.duol.sizscanner.presentation.ui.adapter.TaskItemListAdapter
 import uz.duol.sizscanner.presentation.viewmodel.task.TaskItemListViewModel
 import uz.duol.sizscanner.presentation.viewmodel.task.TaskItemListViewModelImpl
 import uz.duol.sizscanner.utils.TaskStatus
+import uz.duol.sizscanner.utils.disable
+import uz.duol.sizscanner.utils.enable
 import uz.duol.sizscanner.utils.gone
 import uz.duol.sizscanner.utils.showCustomSnackbar
 import uz.duol.sizscanner.utils.snackBar
@@ -90,6 +91,8 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
         }
 
+
+
         mScanner = ScanManager()
         mDecodeResult = DecodeResult()
         mScanResultReceiver = ScanResultReceiver()
@@ -97,7 +100,6 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         if (!isPMModel()) {
             return
         }
-
 
 
 
@@ -121,9 +123,9 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                 binding.beginBtn.text = getString(R.string.done)
                 binding.beginBtn.backgroundTintList =
                     ContextCompat.getColorStateList(requireContext(), R.color.red_dark_color)
-                binding.beginBtn.backgroundTintList =
-                    ContextCompat.getColorStateList(requireContext(), R.color.red_dark_color)
             } else {
+                binding.beginBtn.disable()
+                binding.progress.visible()
                 viewModel.checkTaskStatus(navArg.taskInfo.id)
             }
         }
@@ -153,10 +155,12 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
 
     private val errorTaskMainStatusObserver = Observer<String> {
+        binding.progress.gone()
+        binding.beginBtn.enable()
         if (it == getString(R.string.unauthorised)) {
             findNavController().navigate(R.id.PINCodeScreen)
         } else {
-            findNavController().popBackStack()
+           showCustomSnackbar(R.drawable.error_icon, it)
         }
     }
 
@@ -172,7 +176,6 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
     private val taskMainStatusObserver = Observer<Boolean?> {
         findNavController().popBackStack()
-
     }
 
 
