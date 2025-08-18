@@ -10,6 +10,7 @@ import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -91,8 +92,6 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
 
         }
 
-
-
         mScanner = ScanManager()
         mDecodeResult = DecodeResult()
         mScanResultReceiver = ScanResultReceiver()
@@ -100,6 +99,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
         if (!isPMModel()) {
             return
         }
+
 
 
 
@@ -124,6 +124,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                 binding.beginBtn.backgroundTintList =
                     ContextCompat.getColorStateList(requireContext(), R.color.red_dark_color)
             } else {
+                start = true
                 binding.beginBtn.disable()
                 binding.progress.visible()
                 viewModel.checkTaskStatus(navArg.taskInfo.id)
