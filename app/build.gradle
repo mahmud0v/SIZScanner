@@ -19,9 +19,9 @@ android {
         applicationId "uz.duol.sizscanner"
         minSdk 24
         targetSdk 34
-        versionCode 6
-        versionName "1.3"
-        buildConfigField('String','BASE_URL','"http://192.168.7.25:8080/"')
+        versionCode 7
+        versionName "1.4"
+        buildConfigField('String','BASE_URL','"http://akfa.onlinesavdo.com:7778/"')
         setProperty("archivesBaseName", "Акфа ТЗД-$versionName")
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
 
@@ -56,6 +56,8 @@ android {
      *
      */
 
+    // http://akfa.onlinesavdo.com:7778/
+    // http://192.168.7.102:8082
 
 }
 
