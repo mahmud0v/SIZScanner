@@ -124,6 +124,7 @@ class ScanningProcessScreen : Fragment(R.layout.scanning_process_screen), Lifecy
                 binding.beginBtn.backgroundTintList =
                     ContextCompat.getColorStateList(requireContext(), R.color.red_dark_color)
             } else {
+                start = true
                 binding.beginBtn.disable()
                 binding.progress.visible()
                 viewModel.checkTaskStatus(navArg.taskInfo.id)
